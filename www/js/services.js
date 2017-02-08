@@ -1,4 +1,4 @@
-angular.module('playlist-manager.services', [])
+angular.module('services', [])
 
 .factory('Chats', function() {
   // Might use a resource here that returns a JSON array

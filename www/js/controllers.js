@@ -1,4 +1,4 @@
-angular.module('playlist-manager.controllers', [])
+angular.module('controllers', [])
 
 .controller('PlaylistsCtrl', function($scope) {
   // Default view of app
