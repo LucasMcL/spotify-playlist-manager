@@ -1,6 +1,6 @@
 {
   "name": "spotify-playlist-manager",
-  "version": "1.1.1",
+  "version": "0.1.0",
   "description": "spotify-playlist-manager: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",
@@ -29,5 +29,19 @@
       "version": "",
       "locator": "ios"
     }
-  ]
+  ],
+  "main": "www/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasMcL/spotify-playlist-manager.git"
+  },
+  "author": "Lucas McLaughlin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LucasMcL/spotify-playlist-manager/issues"
+  },
+  "homepage": "https://github.com/LucasMcL/spotify-playlist-manager#readme"
 }
