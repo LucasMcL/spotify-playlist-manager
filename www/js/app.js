@@ -23,7 +23,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -40,15 +40,24 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   // Each tab has its own nav history stack:
 
-  .state('tab.dash', {
-    url: '/dash',
+  .state('tab.playlists', {
+    url: '/playlists',
     views: {
-      'tab-dash': {
-        templateUrl: 'templates/tab-dash.html',
+      'tab-playlists': {
+        templateUrl: 'templates/tab-playlists.html',
         controller: 'DashCtrl'
       }
     }
   })
+    .state('tab.playlist-detail', {
+      url: '/playlists/:playlistId',
+      views: {
+        'tab-playlists': {
+          templateUrl: 'templates/playlist-detail.html',
+          controller: 'PlaylistDetailCtrl',
+        }
+      }
+    })
 
   .state('tab.chats', {
       url: '/chats',
@@ -80,6 +89,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
   });
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/dash');
+  $urlRouterProvider.otherwise('/tab/playlists');
 
+  // Configure layout for Android and iPhone
+  $ionicConfigProvider.tabs.position('bottom')
 });
