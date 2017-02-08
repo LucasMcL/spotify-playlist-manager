@@ -1,6 +1,14 @@
-angular.module('starter.controllers', [])
+angular.module('playlist-manager.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
+.controller('PlaylistsCtrl', function($scope) {
+  // Default view of app
+  // Lists user playlists
+  // When playlist is clicked, shows songs in that playlist
+})
+
+.controller('PlaylistDetailCtrl', function($scope) {
+
+})
 
 .controller('ChatsCtrl', function($scope, Chats) {
   // With the new view caching in Ionic, Controllers are only called
@@ -27,8 +35,5 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistDetailCtrl', function($scope) {
-
-})
 
 
