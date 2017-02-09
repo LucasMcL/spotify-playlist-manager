@@ -24,6 +24,9 @@ angular.module('playlist-manager', ['ionic', 'controllers', 'services'])
   // Learn more here: https://github.com/angular-ui/ui-router
   // Set up the various states which the app can be in.
   // Each state's controller can be found in controllers.js
+
+  $urlRouterProvider.otherwise('/tab/playlists'); // default
+
   $stateProvider
 
   // setup an abstract state for the tabs directive
@@ -33,8 +36,9 @@ angular.module('playlist-manager', ['ionic', 'controllers', 'services'])
     templateUrl: 'templates/tabs.html'
   })
 
-  // Each tab has its own nav history stack:
+  // Each tab has its own nav history stack
 
+  // Nav stack for manage playlists tab
   .state('tab.playlists', {
     url: '/playlists',
     views: {
@@ -54,6 +58,7 @@ angular.module('playlist-manager', ['ionic', 'controllers', 'services'])
       }
     })
 
+  // Nav stack for create tab
   .state('tab.chats', {
       url: '/chats',
       views: {
@@ -73,6 +78,7 @@ angular.module('playlist-manager', ['ionic', 'controllers', 'services'])
       }
     })
 
+  // Nav stack for account tab
   .state('tab.account', {
     url: '/account',
     views: {
@@ -83,8 +89,6 @@ angular.module('playlist-manager', ['ionic', 'controllers', 'services'])
     }
   });
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/playlists');
 
   // Configure layout for Android and iPhone
   $ionicConfigProvider.tabs.position('bottom')
