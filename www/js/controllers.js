@@ -10,6 +10,7 @@ angular.module('controllers', [])
 
   $ionicPlatform.ready(function() {
     let storedToken = window.localStorage.getItem('spotify-token')
+    console.log('checking for stored token')
     if(storedToken) {
       Spotify.setAuthToken(storedToken)
       $scope.updateInfo()
@@ -21,7 +22,7 @@ angular.module('controllers', [])
 
   $scope.performLogin = function() {
     $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
-      console.log("result of performLogin", result)
+      console.log("login successful")
       window.localStorage.setItem('spotify-token', result.access_token)
       Spotify.setAuthToken(result.access_token)
       $scope.updateInfo()
@@ -41,6 +42,7 @@ angular.module('controllers', [])
   $scope.getUserPlaylists = function(userid) {
     Spotify.getUserPlaylists(userid).then(function (data) {
       $scope.playlists = data.items;
+      console.dir($scope.playlists)
     })
   }
 })

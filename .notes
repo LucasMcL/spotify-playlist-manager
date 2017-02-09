@@ -7,3 +7,16 @@ every 30 seconds, redo login using interval
 
 better way:
 spin up local node server to handle auth stuff
+
+To get user playlists
+	- user id
+
+To get songs in playlist
+	- user id
+	- playlist id
+
+owner id
+	- testuserspotifyapp
+
+one playlist id for that user
+ - 4mAV8pRdioaMm5IX8NJWWk
