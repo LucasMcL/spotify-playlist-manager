@@ -1,6 +1,9 @@
-<ion-view view-title="Playlist Manager">
-  <ion-content class="padding">
-    <h1>My Playlists</h1>
-    <a href="#/tab/playlists/0">Here's a playlist</a>
-  </ion-content>
+<ion-view title="My Playlists">
+	<ion-content class="has-header">
+		<ion-list>
+			<ion-item ng-repeat="playlist in playlists" ui-sref="playlist({listid: playlist.id, userid: playlist.owner.id, listname: playlist.name})">
+				{{playlist.name}}
+			</ion-item>
+		</ion-list>
+	</ion-content>
 </ion-view>
