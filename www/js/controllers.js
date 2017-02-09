@@ -23,6 +23,7 @@ angular.module('controllers', [])
   $scope.performLogin = function() {
     $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
       console.log("login successful")
+      console.log("Response Object -> " + JSON.stringify(result));
       window.localStorage.setItem('spotify-token', result.access_token)
       Spotify.setAuthToken(result.access_token)
       $scope.updateInfo()
@@ -42,7 +43,6 @@ angular.module('controllers', [])
   $scope.getUserPlaylists = function(userid) {
     Spotify.getUserPlaylists(userid).then(function (data) {
       $scope.playlists = data.items;
-      console.dir($scope.playlists)
     })
   }
 })
@@ -58,11 +58,15 @@ angular.module('controllers', [])
 
   $scope.tracks = []
 
+  // Get playlist songs using data passed from playlist ctrl
+  // Do this as soon as this controller is instantiated
   Spotify.getPlaylist(userid, listid).then(function(data) {
     $scope.tracks = data.tracks.items
   })
 
-
+  $scope.moveItem = function(item, fromIndex, toIndex) {
+    console.log(`item moved from ${fromIndex} to ${toIndex}`)
+  }
 
 })
 
@@ -89,12 +93,13 @@ angular.module('controllers', [])
   $scope.chat = Chats.get($stateParams.chatId);
 })
 
-.controller('AccountCtrl', function($scope) {
+.controller('AccountCtrl', function($scope, $cordovaOauth, Spotify) {
   console.log('accounts ctrl instantiated')
 
   $scope.settings = {
     enableFriends: true
   };
+
 })
 
 
