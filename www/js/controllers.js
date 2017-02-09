@@ -47,8 +47,22 @@ angular.module('controllers', [])
   }
 })
 
-.controller('PlaylistDetailCtrl', function($scope) {
+.controller('PlaylistDetailCtrl', function($scope, $stateParams, Spotify) {
   console.log('playlist detail control instantiated')
+
+  // Grab variables from route paramaters
+  // This is how I pass the information from PlaylistCtrl
+  let listid = $stateParams.listid
+  let userid = $stateParams.userid
+  $scope.playlistTitle = $stateParams.listTitle
+
+  $scope.tracks = []
+
+  Spotify.getPlaylist(userid, listid).then(function(data) {
+    $scope.tracks = data.tracks.items
+  })
+
+
 
 })
 

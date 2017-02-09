@@ -48,8 +48,8 @@ angular.module('playlist-manager', ['ionic', 'controllers', 'services', 'ngCordo
       }
     }
   })
-    .state('tab.playlist-detail', {
-      url: '/playlists/:playlistId',
+    .state('tab.playlists-detail', {
+      url: 'playlists/:listid/:userid/:listTitle',
       views: {
         'tab-playlists': {
           templateUrl: 'templates/playlist-detail.html',
