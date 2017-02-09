@@ -4,12 +4,13 @@ angular.module('controllers', [])
   console.log('playlist control instantiated')
 
   let CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
-  let SCOPE = ['user-read-private', 'playlist-read-private']
+  let SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
   $scope.playlists = []
 
   $ionicPlatform.ready(function() {
-    let storedToken = window.localStorage.getItem('spotify-token')
+    // let storedToken = window.localStorage.getItem('spotify-token')
+    let storedToken = null
     console.log('checking for stored token')
     if(storedToken) {
       Spotify.setAuthToken(storedToken)
@@ -23,7 +24,6 @@ angular.module('controllers', [])
   $scope.performLogin = function() {
     $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
       console.log("login successful")
-      console.log("Response Object -> " + JSON.stringify(result));
       window.localStorage.setItem('spotify-token', result.access_token)
       Spotify.setAuthToken(result.access_token)
       $scope.updateInfo()
@@ -66,6 +66,15 @@ angular.module('controllers', [])
 
   $scope.moveItem = function(item, fromIndex, toIndex) {
     console.log(`item moved from ${fromIndex} to ${toIndex}`)
+    Spotify.reorderPlaylistTracks(userid, listid, {
+      range_start: fromIndex,
+      insert_before: toIndex
+    }).then(function (response) {
+      console.log("response from moving playlist track --> " + response)
+    }).catch(function (error) {
+      console.log("error from moving playlist track --> ")
+      console.dir(error)
+    })
   }
 
 })
