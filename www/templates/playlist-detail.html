@@ -25,7 +25,7 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
         <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
         </ion-delete-button>
         {{item.track.name}}
-        <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
+        <ion-reorder-button class="ion-navicon" on-reorder="onItemReorder(item, $fromIndex, $toIndex)"></ion-reorder-button>
       </ion-item>
 
     </ion-list>
