@@ -72,16 +72,18 @@ angular.module('controllers', [])
    * @return {[object]} - response from api call or error
    */
   $scope.moveItem = function(item, fromIndex, toIndex) {
-    console.log(`item moved from ${fromIndex} to ${toIndex}`)
+    // console.log(`item moved from ${fromIndex} to ${toIndex}`)
     Spotify.reorderPlaylistTracks(userid, listid, {
       range_start: fromIndex,
       insert_before: toIndex + 1
     }).then(function (response) {
-      console.log("response from moving playlist track:")
-      console.dir(response)
+      Spotify.getPlaylist(userid, listid).then(function(data) {
+        $scope.tracks = data.tracks.items
+      })
     }).catch(function (error) {
       console.log("error from moving playlist track:")
       console.dir(error)
+      alert('There was an error reordering.  Please try again.')
     })
   }
 
