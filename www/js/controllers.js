@@ -58,11 +58,20 @@ angular.module('controllers', [])
 
   $scope.tracks = []
 
-  // Get playlist songs using data passed from playlist ctrl
-  // Do this as soon as this controller is instantiated
-  Spotify.getPlaylist(userid, listid).then(function(data) {
-    $scope.tracks = data.tracks.items
-  })
+  // Load in tracks when controller is instantiated
+  getTracks()
+
+  /**
+   * Get tracks for playlist usig playlist id and user id
+   */
+  function getTracks() {
+    Spotify.getPlaylist(userid, listid)
+      .then(data => {
+        $scope.tracks = data.tracks.items
+      }).catch(error => {
+        console.dir(error)
+      })
+  }
 
   // Makes the call to Spotify to reorder a song
   /**
@@ -71,21 +80,51 @@ angular.module('controllers', [])
    * @param  {[integer]} - index in ion-list item moved to
    * @return {[object]} - response from api call or error
    */
-  $scope.moveItem = function(item, fromIndex, toIndex) {
-    // console.log(`item moved from ${fromIndex} to ${toIndex}`)
+  $scope.onItemMove = function(item, fromIndex, toIndex) {
     Spotify.reorderPlaylistTracks(userid, listid, {
       range_start: fromIndex,
       insert_before: toIndex + 1
-    }).then(function (response) {
-      Spotify.getPlaylist(userid, listid).then(function(data) {
-        $scope.tracks = data.tracks.items
-      })
-    }).catch(function (error) {
-      console.log("error from moving playlist track:")
-      console.dir(error)
-      alert('There was an error reordering.  Please try again.')
     })
+      .then(response => {
+        console.dir(response)
+        getTracks()
+      })
+      .catch(error => {
+        console.log("error from moving playlist track:")
+        console.dir(error)
+        alert('There was an error reordering.  Please try again.')
+      })
   }
+
+  /**
+   * @param  {object} item - object that contains track info and metadata
+   */
+  $scope.onItemDelete = function(item) {
+    let uri = item.track.uri
+    Spotify.removePlaylistTracks(userid, listid, uri)
+      .then(response => {
+        console.dir(response)
+        getTracks()
+      })
+      .catch(error => {
+        console.dir(error)
+        alert('There was an error deleting that track.  Please try again.')
+      })
+  }
+
+ // $scope.onItemDelete = function(item) {
+ //    let uri = item.track.uri
+ //    Spotify
+ //      .removePlaylistTracks(userid, listid, uri)
+ //      .then(function(response) {
+ //        console.dir(response)
+ //        getTracks()
+ //      })
+ //      .catch(function(error) {
+ //        console.dir(error)
+ //        alert('There was an error deleting.  Please try again.')
+ //      })
+ //  }
 
 })
 
