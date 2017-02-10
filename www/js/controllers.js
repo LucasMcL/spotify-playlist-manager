@@ -58,33 +58,62 @@ angular.module('controllers', [])
 
   $scope.tracks = []
 
-  // Get playlist songs using data passed from playlist ctrl
-  // Do this as soon as this controller is instantiated
-  Spotify.getPlaylist(userid, listid).then(function(data) {
-    $scope.tracks = data.tracks.items
-  })
+  console.log('getting initial tracks')
+  console.log($stateParams.listid)
+  console.log($stateParams.userid)
+  getTracks()
 
-  // Makes the call to Spotify to reorder a song
+  /**
+   * @param  {string} userid - spotify user id
+   * @param  {string} listid - spotify playlist id
+   */
+  function getTracks (userid, listid) {
+    Spotify.getPlaylist(userid, listid).then(function(data) {
+      $scope.tracks = data.tracks.items
+    }).catch(error => {
+      console.dir(error)
+      alert('There was an error retreiving tracks.  Please try again.')
+    })
+  }
+
+
   /**
    * @param  {object} item - item being moved
-   * @param  {[integer]} - index in ion-list item WAS in
-   * @param  {[integer]} - index in ion-list item moved to
-   * @return {[object]} - response from api call or error
+   * @param  {number} fromIndex - index in ion-list item WAS in
+   * @param  {number} toIndex - index in ion-list item moved to
    */
-  $scope.moveItem = function(item, fromIndex, toIndex) {
-    // console.log(`item moved from ${fromIndex} to ${toIndex}`)
-    Spotify.reorderPlaylistTracks(userid, listid, {
-      range_start: fromIndex,
-      insert_before: toIndex + 1
-    }).then(function (response) {
-      Spotify.getPlaylist(userid, listid).then(function(data) {
-        $scope.tracks = data.tracks.items
+  $scope.onItemReorder = function(item, fromIndex, toIndex) {
+    Spotify
+      .reorderPlaylistTracks(userid, listid, {
+        range_start: fromIndex,
+        insert_before: toIndex + 1
       })
-    }).catch(function (error) {
-      console.log("error from moving playlist track:")
-      console.dir(error)
-      alert('There was an error reordering.  Please try again.')
-    })
+      .then(response => {
+        console.dir(response)
+        getTracks()
+      })
+      .catch(error => {
+        console.log("error from moving playlist track:")
+        console.dir(error)
+        alert('There was an error reordering.  Please try again.')
+      })
+  }
+
+  /**
+   * @param  {object} item - object containing track info and metadata
+   */
+  $scope.onItemDelete = function(item) {
+    let uri = item.track.uri
+    Spotify
+      .removePlaylistTracks(userid, listid, uri)
+      .then(function(response) {
+        console.dir(response)
+        getTracks()
+      })
+      .catch(function(error) {
+        console.dir(error)
+        alert('There was an error deleting.  Please try again.')
+      })
   }
 
 })
