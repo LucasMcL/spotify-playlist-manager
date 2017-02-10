@@ -58,6 +58,8 @@ angular.module('controllers', [])
 
   $scope.tracks = []
 
+  $scope.audio = new Audio()
+
   // Load in tracks when controller is instantiated
   getTracks()
 
@@ -112,19 +114,10 @@ angular.module('controllers', [])
       })
   }
 
- // $scope.onItemDelete = function(item) {
- //    let uri = item.track.uri
- //    Spotify
- //      .removePlaylistTracks(userid, listid, uri)
- //      .then(function(response) {
- //        console.dir(response)
- //        getTracks()
- //      })
- //      .catch(function(error) {
- //        console.dir(error)
- //        alert('There was an error deleting.  Please try again.')
- //      })
- //  }
+  $scope.playTrack = function(item) {
+    $scope.audio.src = item.track.preview_url
+    $scope.audio.play()
+  }
 
 })
 

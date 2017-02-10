@@ -11,10 +11,15 @@ These variables are then retrieved by that controller (controllers.js)
 -->
 <ion-view title="My Playlists">
 	<ion-content class="has-header">
-		<ion-list>
-			<ion-item ng-repeat="playlist in playlists" ui-sref="tab.playlists-detail({listid: playlist.id, userid: playlist.owner.id, listTitle: playlist.name})">
-				{{playlist.name}}
-			</ion-item>
-		</ion-list>
+		<div class="list">
+			<a ng-repeat="playlist in playlists"
+				 class="item item-thumbnail-left"
+				 ui-sref="tab.playlists-detail({listid: playlist.id, userid: playlist.owner.id, listTitle: playlist.name})">
+				<img ng-src="{{playlist.images[0].url}}">
+				<h2>{{playlist.name}}</h2>
+			</a>
+		</div>
 	</ion-content>
 </ion-view>
+
+

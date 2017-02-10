@@ -21,13 +21,16 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
     <ion-list show-reorder="data.showReorder", show-delete="data.showDelete">
       <div class="item-divider">{{playlistTitle}}</div>
 
-      <ion-item ng-repeat="item in tracks">
+      <ion-item ng-repeat="item in tracks" on-tap="playTrack(item)">
         <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
         </ion-delete-button>
-        {{item.track.name}}
+        <h3>{{item.track.name}}</h3>
+        <p>{{item.track.artists[0].name}} • {{item.track.album.name}}</p>
         <ion-reorder-button class="ion-navicon" on-reorder="onItemMove(item, $fromIndex, $toIndex)"></ion-reorder-button>
       </ion-item>
 
     </ion-list>
   </ion-content>
 </ion-view>
+
+
