@@ -9,8 +9,8 @@ angular.module('controllers', [])
   $scope.playlists = []
 
   $ionicPlatform.ready(function() {
-    // let storedToken = window.localStorage.getItem('spotify-token')
-    let storedToken = null
+    let storedToken = window.localStorage.getItem('spotify-token')
+    // let storedToken = null
     console.log('checking for stored token')
     if(storedToken) {
       Spotify.setAuthToken(storedToken)
@@ -64,15 +64,23 @@ angular.module('controllers', [])
     $scope.tracks = data.tracks.items
   })
 
+  // Makes the call to Spotify to reorder a song
+  /**
+   * @param  {object} item - item being moved
+   * @param  {[integer]} - index in ion-list item WAS in
+   * @param  {[integer]} - index in ion-list item moved to
+   * @return {[object]} - response from api call or error
+   */
   $scope.moveItem = function(item, fromIndex, toIndex) {
     console.log(`item moved from ${fromIndex} to ${toIndex}`)
     Spotify.reorderPlaylistTracks(userid, listid, {
       range_start: fromIndex,
-      insert_before: toIndex
+      insert_before: toIndex + 1
     }).then(function (response) {
-      console.log("response from moving playlist track --> " + response)
+      console.log("response from moving playlist track:")
+      console.dir(response)
     }).catch(function (error) {
-      console.log("error from moving playlist track --> ")
+      console.log("error from moving playlist track:")
       console.dir(error)
     })
   }

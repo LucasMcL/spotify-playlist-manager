@@ -3,13 +3,31 @@ This template loads for the 'tab.playlists-detail' state (app.js)
 tracks is list of songs in playlist, retreived from spotify (controller.js)
 -->
 
-<ion-view title="{{playlistTitle}}">
+<ion-view title="Playlist Manager">
+<!--   <ion-header-bar class="bar-subheader" align-title="center">
+    <h4 class="title">Edit</h4>
+  </ion-header-bar> -->
   <ion-content class="padding">
-    <ion-list show-reorder="true">
+    <!-- Options -->
+    <ion-list>
+      <ion-item class="item-divider">Options</ion-item>
+
+      <ion-toggle ng-model="data.showReorder">Reorder</ion-toggle>
+      <ion-toggle ng-model="data.showDelete">Delete</ion-toggle>
+    </ion-list>
+
+
+    <!-- Playlist -->
+    <ion-list show-reorder="data.showReorder", show-delete="data.showDelete">
+      <div class="item-divider">{{playlistTitle}}</div>
+
       <ion-item ng-repeat="item in tracks">
+        <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
+        </ion-delete-button>
         {{item.track.name}}
         <ion-reorder-button class="ion-navicon" on-reorder="moveItem(item, $fromIndex, $toIndex)"></ion-reorder-button>
       </ion-item>
+
     </ion-list>
   </ion-content>
 </ion-view>
