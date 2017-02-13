@@ -122,9 +122,23 @@ angular.module('controllers', [])
       })
   }
 
+  $scope.logTracks = function() {
+    console.dir($scope.tracks[0])
+  }
+
   $scope.playTrack = function(item) {
     $scope.audio.src = item.track.preview_url
     $scope.audio.play()
+  }
+
+  $scope.saveChanges = function() {
+    console.log('save changes')
+    $scope.toggleEditMode()
+  }
+
+  $scope.cancelChanges = function() {
+    console.log('cancel changes')
+    $scope.toggleEditMode()
   }
 
   // Display popup asking if user wants to leave

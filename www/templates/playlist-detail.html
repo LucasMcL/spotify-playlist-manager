@@ -23,11 +23,14 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
     </ion-list>
 
     <!-- Save/cancel buttons shown in edit mode -->
-    <button class="button button-block button-balanced" ng-show="editMode">
+    <button class="button button-block button-balanced" ng-show="editMode" ng-click=saveChanges()>
       Save
     </button>
-    <button class="button button-block button-stable" ng-show="editMode">
-      Cancel
+    <button class="button button-block button-assertive" ng-show="editMode" ng-click="cancelChanges()">
+      Discard changes
+    </button>
+    <button class="button button-block button-stable" ng-show="editMode" ng-click="logTracks()">
+      Log Tracks
     </button>
   </ion-content>
 </ion-view>
