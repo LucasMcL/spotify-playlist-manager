@@ -127,19 +127,7 @@ angular.module('controllers', [])
     $scope.audio.play()
   }
 
-  // $scope.$on('$ionicView.beforeLeave', function() {
-  //   var confirmExit = $ionicPopup.confirm({
-  //     title: 'Before you leave',
-  //     template: 'Are you sure you want to leave without saving?'
-  //   })
-
-  //   confirmExit.then(function(res) {
-  //     if(res) console.log('positive response')
-  //     else console.log('negative response')
-  //   })
-  // })
-
-  // Confirm leaving when in edit mode
+  // Display popup asking if user wants to leave
   $ionicPlatform.registerBackButtonAction(function () {
     if($scope.editMode){
       var confirmExit = $ionicPopup.confirm({
