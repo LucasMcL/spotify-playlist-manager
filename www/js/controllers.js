@@ -47,7 +47,7 @@ angular.module('controllers', [])
   }
 })
 
-.controller('PlaylistDetailCtrl', function($scope, $stateParams, Spotify) {
+.controller('PlaylistDetailCtrl', function($scope, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup) {
   console.log('playlist detail control instantiated')
 
   // Grab variables from route paramaters
@@ -78,6 +78,9 @@ angular.module('controllers', [])
 
   $scope.toggleEditMode = function() {
     $scope.editMode = !$scope.editMode
+
+    // Hide back button when editing
+    $ionicNavBarDelegate.showBackButton(!$scope.editMode)
   }
 
   // Makes the call to Spotify to reorder a song
@@ -123,6 +126,19 @@ angular.module('controllers', [])
     $scope.audio.src = item.track.preview_url
     $scope.audio.play()
   }
+
+  $scope.$on('$ionicView.beforeLeave', function() {
+    var confirmExit = $ionicPopup.confirm({
+      title: 'Before you leave',
+      template: 'Are you sure you want to leave without saving?'
+    })
+
+    confirmExit.then(function(res) {
+      if(res) console.log('positive response')
+      else console.log('negative response')
+    })
+  })
+
 
 })
 
