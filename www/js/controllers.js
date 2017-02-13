@@ -56,8 +56,9 @@ angular.module('controllers', [])
   let userid = $stateParams.userid
   $scope.playlistTitle = $stateParams.listTitle
 
-  $scope.tracks = []
+  $scope.editMode = false // toggled on and off
 
+  $scope.tracks = []
   $scope.audio = new Audio()
 
   // Load in tracks when controller is instantiated
@@ -73,6 +74,10 @@ angular.module('controllers', [])
       }).catch(error => {
         console.dir(error)
       })
+  }
+
+  $scope.toggleEditMode = function() {
+    $scope.editMode = !$scope.editMode
   }
 
   // Makes the call to Spotify to reorder a song
