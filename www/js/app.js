@@ -2,7 +2,7 @@
 // Inject dependencies
 angular.module('playlist-manager', ['ionic', 'controllers', 'services', 'ngCordovaOauth', 'spotify'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $state, $ionicHistory, $ionicPopup) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
