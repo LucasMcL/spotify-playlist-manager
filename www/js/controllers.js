@@ -83,47 +83,20 @@ angular.module('controllers', [])
     $ionicNavBarDelegate.showBackButton(!$scope.editMode)
   }
 
-  // Makes the call to Spotify to reorder a song
-  /**
-   * @param  {object} item - item being moved
-   * @param  {[integer]} - index in ion-list item WAS in
-   * @param  {[integer]} - index in ion-list item moved to
-   * @return {[object]} - response from api call or error
-   */
   $scope.onItemMove = function(item, fromIndex, toIndex) {
-    Spotify.reorderPlaylistTracks(userid, listid, {
-      range_start: fromIndex,
-      insert_before: toIndex + 1
-    })
-      .then(response => {
-        console.dir(response)
-        getTracks()
-      })
-      .catch(error => {
-        console.log("error from moving playlist track:")
-        console.dir(error)
-        alert('There was an error reordering.  Please try again.')
-      })
+    $scope.tracks.splice(fromIndex, 1);
+    $scope.tracks.splice(toIndex, 0, item);
+    $scope.$apply()
   }
 
-  /**
-   * @param  {object} item - object that contains track info and metadata
-   */
   $scope.onItemDelete = function(item) {
-    let uri = item.track.uri
-    Spotify.removePlaylistTracks(userid, listid, uri)
-      .then(response => {
-        console.dir(response)
-        getTracks()
-      })
-      .catch(error => {
-        console.dir(error)
-        alert('There was an error deleting that track.  Please try again.')
-      })
+    $scope.tracks.splice($scope.tracks.indexOf(item), 1)
   }
 
+  // REMOVE ME
   $scope.logTracks = function() {
-    console.dir($scope.tracks[0])
+    $scope.tracks.forEach(item => console.log(item.track.name))
+    $scope.tracks.forEach(item => console.log(item.track.uri))
   }
 
   $scope.playTrack = function(item) {
@@ -133,7 +106,16 @@ angular.module('controllers', [])
 
   $scope.saveChanges = function() {
     console.log('save changes')
-    $scope.toggleEditMode()
+    let uris = []
+    $scope.tracks.forEach(item => uris.push(item.track.uri))
+    Spotify
+      .replacePlaylistTracks(userid, listid, uris)
+      .then(data => {
+        console.log(data)
+      })
+      .catch(error => {
+        console.dir(error)
+      })
   }
 
   $scope.cancelChanges = function() {
