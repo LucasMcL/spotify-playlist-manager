@@ -47,7 +47,7 @@ angular.module('controllers', [])
   }
 })
 
-.controller('PlaylistDetailCtrl', function($scope, $stateParams, Spotify) {
+.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory) {
   console.log('playlist detail control instantiated')
 
   // Grab variables from route paramaters
@@ -56,8 +56,9 @@ angular.module('controllers', [])
   let userid = $stateParams.userid
   $scope.playlistTitle = $stateParams.listTitle
 
-  $scope.tracks = []
+  $scope.editMode = false // toggled on and off
 
+  $scope.tracks = []
   $scope.audio = new Audio()
 
   // Load in tracks when controller is instantiated
@@ -73,6 +74,13 @@ angular.module('controllers', [])
       }).catch(error => {
         console.dir(error)
       })
+  }
+
+  $scope.toggleEditMode = function() {
+    $scope.editMode = !$scope.editMode
+
+    // Hide back button when editing
+    $ionicNavBarDelegate.showBackButton(!$scope.editMode)
   }
 
   // Makes the call to Spotify to reorder a song
@@ -118,6 +126,38 @@ angular.module('controllers', [])
     $scope.audio.src = item.track.preview_url
     $scope.audio.play()
   }
+
+  // $scope.$on('$ionicView.beforeLeave', function() {
+  //   var confirmExit = $ionicPopup.confirm({
+  //     title: 'Before you leave',
+  //     template: 'Are you sure you want to leave without saving?'
+  //   })
+
+  //   confirmExit.then(function(res) {
+  //     if(res) console.log('positive response')
+  //     else console.log('negative response')
+  //   })
+  // })
+
+  // Confirm leaving when in edit mode
+  $ionicPlatform.registerBackButtonAction(function () {
+    if($scope.editMode){
+      var confirmExit = $ionicPopup.confirm({
+        title: 'Before you leave',
+        template: 'Leave without saving?',
+        cancelText: 'Leave',
+        okText: 'Stay'
+      })
+      confirmExit.then(function(res) {
+        if(res) console.log('user chose to stay')
+        else $ionicHistory.goBack()
+      })
+    }
+    else {
+      $ionicHistory.goBack()
+    }
+  }, 100)
+
 
 })
 
