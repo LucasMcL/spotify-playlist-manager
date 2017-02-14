@@ -58,6 +58,7 @@ angular.module('controllers', [])
 
   $scope.editMode = false // toggled on and off
   $scope.changesMade = false // turned to true when first edit made
+  $scope.orderCriteria = "none"
 
   $scope.tracks = []
 
@@ -136,7 +137,6 @@ angular.module('controllers', [])
           console.dir(error)
         })
     }
-
   }
 
   $scope.cancelChanges = function() {
@@ -150,10 +150,6 @@ angular.module('controllers', [])
 
   // Save playlist upon app going into background
   $ionicPlatform.on('pause', $scope.saveChanges);
-
-  $scope.logSelected = function() {
-    console.log($scope.orderCriteria)
-  }
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
