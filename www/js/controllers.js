@@ -87,6 +87,8 @@ angular.module('controllers', [])
     console.log('edit button tap')
     if($scope.editMode) {
       $scope.saveChanges()
+    } else {
+      toggleEditMode()
     }
   }
 
