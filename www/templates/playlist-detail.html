@@ -9,6 +9,21 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
   </ion-nav-buttons>
   <ion-content class="padding">
 
+    <ion-item class="item-input item-select" ng-show="editMode">
+      <div class="input-label">
+        Order by
+      </div>
+      <select ng-model="orderCriteria">
+        <option selected value="none">None</option>
+        <option value="artist">Artist</option>
+        <option value="album">Album</option>
+        <option value="date">Date Added</option>
+        <option value="length">Song length</option>
+      </select>
+    </ion-item>
+
+    <h1>Order by {{orderCriteria}}</h1>
+
     <!-- Playlist songs -->
     <ion-list show-reorder="editMode", show-delete="editMode">
 
