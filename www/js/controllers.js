@@ -150,6 +150,10 @@ angular.module('controllers', [])
 
   // Save playlist upon app going into background
   $ionicPlatform.on('pause', $scope.saveChanges);
+
+  $scope.logSelected = function() {
+    console.log($scope.orderCriteria)
+  }
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
