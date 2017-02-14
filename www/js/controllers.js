@@ -47,7 +47,7 @@ angular.module('controllers', [])
   }
 })
 
-.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory) {
+.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $cordovaToast) {
   console.log('playlist detail control instantiated')
 
   // Grab variables from route paramaters
@@ -57,6 +57,7 @@ angular.module('controllers', [])
   $scope.playlistTitle = $stateParams.listTitle
 
   $scope.editMode = false // toggled on and off
+  $scope.changesMade = false // turned to true when first edit made
 
   $scope.tracks = []
   $scope.audio = new Audio()
@@ -76,72 +77,84 @@ angular.module('controllers', [])
       })
   }
 
-  $scope.toggleEditMode = function() {
+  function toggleEditMode() {
     $scope.editMode = !$scope.editMode
-
-    // Hide back button when editing
-    $ionicNavBarDelegate.showBackButton(!$scope.editMode)
   }
 
-  // Makes the call to Spotify to reorder a song
-  /**
-   * @param  {object} item - item being moved
-   * @param  {[integer]} - index in ion-list item WAS in
-   * @param  {[integer]} - index in ion-list item moved to
-   * @return {[object]} - response from api call or error
-   */
-  $scope.onItemMove = function(item, fromIndex, toIndex) {
-    Spotify.reorderPlaylistTracks(userid, listid, {
-      range_start: fromIndex,
-      insert_before: toIndex + 1
+  function showPlaylistSavedToast() {
+    $cordovaToast.showWithOptions({
+      message: "Playlist saved",
+      duration: "short", // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself.
+      position: "bottom",
+      addPixelsY: -175  // added a negative value to move it up a bit (default 0)
+    }).then(success => {
+      console.log(success)
+    }).catch(error => {
+      console.log(error)
     })
-      .then(response => {
-        console.dir(response)
-        getTracks()
-      })
-      .catch(error => {
-        console.log("error from moving playlist track:")
-        console.dir(error)
-        alert('There was an error reordering.  Please try again.')
-      })
   }
 
-  /**
-   * @param  {object} item - object that contains track info and metadata
-   */
+  $scope.onEditButtonTap = function() {
+    console.log('edit button tap')
+    if($scope.editMode) {
+      $scope.saveChanges()
+    } else {
+      toggleEditMode()
+    }
+  }
+
+  $scope.onItemMove = function(item, fromIndex, toIndex) {
+    $scope.tracks.splice(fromIndex, 1)
+    $scope.tracks.splice(toIndex, 0, item)
+    $scope.$apply()
+
+    $scope.changesMade = true
+  }
+
   $scope.onItemDelete = function(item) {
-    let uri = item.track.uri
-    Spotify.removePlaylistTracks(userid, listid, uri)
-      .then(response => {
-        console.dir(response)
-        getTracks()
-      })
-      .catch(error => {
-        console.dir(error)
-        alert('There was an error deleting that track.  Please try again.')
-      })
+    $scope.tracks.splice($scope.tracks.indexOf(item), 1)
+
+    $scope.changesMade = true
   }
 
+  // Not being used currently
   $scope.playTrack = function(item) {
     $scope.audio.src = item.track.preview_url
-    $scope.audio.play()
+    // $scope.audio.play()
   }
 
-  // $scope.$on('$ionicView.beforeLeave', function() {
-  //   var confirmExit = $ionicPopup.confirm({
-  //     title: 'Before you leave',
-  //     template: 'Are you sure you want to leave without saving?'
-  //   })
+  $scope.saveChanges = function() {
+    if($scope.changesMade === false) {
+      console.log('no changes made')
+      toggleEditMode()
+    } else {
+      console.log('save changes')
+      let uris = []
+      $scope.tracks.forEach(item => uris.push(item.track.uri))
+      Spotify
+        .replacePlaylistTracks(userid, listid, uris)
+        .then(data => {
+          $scope.changesMade = false // reset after save
+          toggleEditMode()
+          showPlaylistSavedToast()
+        })
+        .catch(error => {
+          alert('There was an error saving changes.  Please try again.')
+          console.dir(error)
+        })
+    }
 
-  //   confirmExit.then(function(res) {
-  //     if(res) console.log('positive response')
-  //     else console.log('negative response')
-  //   })
-  // })
+  }
 
-  // Confirm leaving when in edit mode
+  $scope.cancelChanges = function() {
+    console.log('cancel changes')
+    getTracks()
+    toggleEditMode()
+  }
+
+  // Display popup asking if user wants to leave
   $ionicPlatform.registerBackButtonAction(function () {
-    if($scope.editMode){
+    if($state.current.name === 'tab.playlists-detail' && $scope.editMode) {
       var confirmExit = $ionicPopup.confirm({
         title: 'Before you leave',
         template: 'Leave without saving?',
