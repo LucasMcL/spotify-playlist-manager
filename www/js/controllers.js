@@ -83,6 +83,19 @@ angular.module('controllers', [])
     $ionicNavBarDelegate.showBackButton(!$scope.editMode)
   }
 
+  function showPlaylistSavedToast() {
+    $cordovaToast.showWithOptions({
+      message: "Playlist saved",
+      duration: "short", // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself.
+      position: "bottom",
+      addPixelsY: -175  // added a negative value to move it up a bit (default 0)
+    }).then(success => {
+      console.log(success)
+    }).catch(error => {
+      console.log(error)
+    })
+  }
+
   $scope.onEditButtonTap = function() {
     console.log('edit button tap')
     if($scope.editMode) {
@@ -117,6 +130,7 @@ angular.module('controllers', [])
       .then(data => {
         console.log(data)
         toggleEditMode()
+        showPlaylistSavedToast()
       })
       .catch(error => {
         alert('There was an error saving changes.  Please try again.')
