@@ -93,15 +93,10 @@ angular.module('controllers', [])
     $scope.tracks.splice($scope.tracks.indexOf(item), 1)
   }
 
-  // REMOVE ME
-  $scope.logTracks = function() {
-    $scope.tracks.forEach(item => console.log(item.track.name))
-    $scope.tracks.forEach(item => console.log(item.track.uri))
-  }
-
+  // Not being used currently
   $scope.playTrack = function(item) {
     $scope.audio.src = item.track.preview_url
-    $scope.audio.play()
+    // $scope.audio.play()
   }
 
   $scope.saveChanges = function() {
@@ -125,7 +120,7 @@ angular.module('controllers', [])
 
   // Display popup asking if user wants to leave
   $ionicPlatform.registerBackButtonAction(function () {
-    if($scope.editMode){
+    if($state.current.name === 'tab.playlists-detail' && $scope.editMode) {
       var confirmExit = $ionicPopup.confirm({
         title: 'Before you leave',
         template: 'Leave without saving?',
