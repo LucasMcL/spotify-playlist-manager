@@ -57,6 +57,7 @@ angular.module('controllers', [])
   $scope.playlistTitle = $stateParams.listTitle
 
   $scope.editMode = false // toggled on and off
+  $scope.changesMade = false // turned to true when first edit made
 
   $scope.tracks = []
   $scope.audio = new Audio()
@@ -78,9 +79,6 @@ angular.module('controllers', [])
 
   function toggleEditMode() {
     $scope.editMode = !$scope.editMode
-
-    // Hide back button when editing
-    $ionicNavBarDelegate.showBackButton(!$scope.editMode)
   }
 
   function showPlaylistSavedToast() {
@@ -106,13 +104,17 @@ angular.module('controllers', [])
   }
 
   $scope.onItemMove = function(item, fromIndex, toIndex) {
-    $scope.tracks.splice(fromIndex, 1);
-    $scope.tracks.splice(toIndex, 0, item);
+    $scope.tracks.splice(fromIndex, 1)
+    $scope.tracks.splice(toIndex, 0, item)
     $scope.$apply()
+
+    $scope.changesMade = true
   }
 
   $scope.onItemDelete = function(item) {
     $scope.tracks.splice($scope.tracks.indexOf(item), 1)
+
+    $scope.changesMade = true
   }
 
   // Not being used currently
@@ -122,20 +124,26 @@ angular.module('controllers', [])
   }
 
   $scope.saveChanges = function() {
-    console.log('save changes')
-    let uris = []
-    $scope.tracks.forEach(item => uris.push(item.track.uri))
-    Spotify
-      .replacePlaylistTracks(userid, listid, uris)
-      .then(data => {
-        console.log(data)
-        toggleEditMode()
-        showPlaylistSavedToast()
-      })
-      .catch(error => {
-        alert('There was an error saving changes.  Please try again.')
-        console.dir(error)
-      })
+    if($scope.changesMade === false) {
+      console.log('no changes made')
+      toggleEditMode()
+    } else {
+      console.log('save changes')
+      let uris = []
+      $scope.tracks.forEach(item => uris.push(item.track.uri))
+      Spotify
+        .replacePlaylistTracks(userid, listid, uris)
+        .then(data => {
+          $scope.changesMade = false // reset after save
+          toggleEditMode()
+          showPlaylistSavedToast()
+        })
+        .catch(error => {
+          alert('There was an error saving changes.  Please try again.')
+          console.dir(error)
+        })
+    }
+
   }
 
   $scope.cancelChanges = function() {
