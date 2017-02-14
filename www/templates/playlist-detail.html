@@ -5,14 +5,14 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
 
 <ion-view title="{{playlistTitle}}">
   <ion-nav-buttons side="secondary">
-    <button class="button button-icon icon ion-edit" ng-click="toggleEditMode()"></button>
+    <button class="button button-icon icon ion-edit" ng-click="onEditButtonTap()"></button>
   </ion-nav-buttons>
   <ion-content class="padding">
 
     <!-- Playlist songs -->
     <ion-list show-reorder="editMode", show-delete="editMode">
 
-      <ion-item ng-repeat="item in tracks" on-tap="playTrack(item)">
+      <ion-item ng-repeat="item in tracks">
         <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
         </ion-delete-button>
         <h3>{{item.track.name}}</h3>
@@ -26,11 +26,8 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
     <button class="button button-block button-balanced" ng-show="editMode" ng-click=saveChanges()>
       Save
     </button>
-    <button class="button button-block button-assertive" ng-show="editMode" ng-click="cancelChanges()">
+    <button class="button button-block button-stable" ng-show="editMode" ng-click="cancelChanges()">
       Discard changes
-    </button>
-    <button class="button button-block button-stable" ng-show="editMode" ng-click="logTracks()">
-      Log Tracks
     </button>
   </ion-content>
 </ion-view>

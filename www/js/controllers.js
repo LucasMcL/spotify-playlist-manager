@@ -76,11 +76,18 @@ angular.module('controllers', [])
       })
   }
 
-  $scope.toggleEditMode = function() {
+  function toggleEditMode() {
     $scope.editMode = !$scope.editMode
 
     // Hide back button when editing
     $ionicNavBarDelegate.showBackButton(!$scope.editMode)
+  }
+
+  $scope.onEditButtonTap = function() {
+    console.log('edit button tap')
+    if($scope.editMode) {
+      $scope.saveChanges()
+    }
   }
 
   $scope.onItemMove = function(item, fromIndex, toIndex) {
@@ -107,15 +114,18 @@ angular.module('controllers', [])
       .replacePlaylistTracks(userid, listid, uris)
       .then(data => {
         console.log(data)
+        toggleEditMode()
       })
       .catch(error => {
+        alert('There was an error saving changes.  Please try again.')
         console.dir(error)
       })
   }
 
   $scope.cancelChanges = function() {
     console.log('cancel changes')
-    $scope.toggleEditMode()
+    getTracks()
+    toggleEditMode()
   }
 
   // Display popup asking if user wants to leave
