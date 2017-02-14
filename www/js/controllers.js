@@ -58,7 +58,7 @@ angular.module('controllers', [])
 
   $scope.editMode = false // toggled on and off
   $scope.changesMade = false // turned to true when first edit made
-  $scope.orderCriteria = "none"
+  $scope.orderCriteria = ""
 
   $scope.tracks = []
 
@@ -113,6 +113,13 @@ angular.module('controllers', [])
 
   $scope.onItemDelete = function(item) {
     $scope.tracks.splice($scope.tracks.indexOf(item), 1)
+
+    $scope.changesMade = true
+  }
+
+  $scope.onSelectChange = function(orderCriteria) {
+    // attach variable to this scope
+    $scope.orderCriteria = orderCriteria
 
     $scope.changesMade = true
   }

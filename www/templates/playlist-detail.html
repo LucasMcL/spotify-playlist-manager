@@ -13,21 +13,20 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
       <div class="input-label">
         Order by
       </div>
-      <select ng-model="orderCriteria">
-        <option selected value="none">None</option>
-        <option value="artist">Artist</option>
-        <option value="album">Album</option>
-        <option value="date">Date Added</option>
-        <option value="length">Song length</option>
+      <select ng-model="orderCriteria" ng-change="onSelectChange(orderCriteria)">
+        <option selected value="">None</option>
+        <option value="track.name">Song</option>
+        <option value="">Artist</option>
+        <option value="">Album</option>
+        <option value="">Date Added</option>
+        <option value="">Song length</option>
       </select>
     </ion-item>
-
-    <h1>Order by {{orderCriteria}}</h1>
 
     <!-- Playlist songs -->
     <ion-list show-reorder="editMode", show-delete="editMode">
 
-      <ion-item ng-repeat="item in tracks">
+      <ion-item ng-repeat="item in tracks | orderBy:orderCriteria">
         <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
         </ion-delete-button>
         <h3>{{item.track.name}}</h3>
