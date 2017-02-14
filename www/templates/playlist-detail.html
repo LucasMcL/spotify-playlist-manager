@@ -16,8 +16,8 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
       <select ng-model="orderCriteria" ng-change="onSelectChange(orderCriteria)">
         <option selected value="">None</option>
         <option value="track.name">Song</option>
-        <option value="">Artist</option>
-        <option value="">Album</option>
+        <option value="track.artists[0].name">Artist</option>
+        <option value="track.album.name">Album</option>
         <option value="">Date Added</option>
         <option value="">Song length</option>
       </select>
