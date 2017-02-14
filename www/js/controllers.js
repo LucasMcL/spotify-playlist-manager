@@ -60,7 +60,6 @@ angular.module('controllers', [])
   $scope.changesMade = false // turned to true when first edit made
 
   $scope.tracks = []
-  $scope.audio = new Audio()
 
   // Load in tracks when controller is instantiated
   getTracks()
@@ -117,12 +116,6 @@ angular.module('controllers', [])
     $scope.changesMade = true
   }
 
-  // Not being used currently
-  $scope.playTrack = function(item) {
-    $scope.audio.src = item.track.preview_url
-    // $scope.audio.play()
-  }
-
   $scope.saveChanges = function() {
     if($scope.changesMade === false) {
       console.log('no changes made')
@@ -152,26 +145,11 @@ angular.module('controllers', [])
     toggleEditMode()
   }
 
-  // Display popup asking if user wants to leave
-  $ionicPlatform.registerBackButtonAction(function () {
-    if($state.current.name === 'tab.playlists-detail' && $scope.editMode) {
-      var confirmExit = $ionicPopup.confirm({
-        title: 'Before you leave',
-        template: 'Leave without saving?',
-        cancelText: 'Leave',
-        okText: 'Stay'
-      })
-      confirmExit.then(function(res) {
-        if(res) console.log('user chose to stay')
-        else $ionicHistory.goBack()
-      })
-    }
-    else {
-      $ionicHistory.goBack()
-    }
-  }, 100)
+  // Save playlist upon leaving view
+  $scope.$on("$ionicView.leave", $scope.saveChanges);
 
-
+  // Save playlist upon app going into background
+  $ionicPlatform.on('pause', $scope.saveChanges);
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
