@@ -47,7 +47,7 @@ angular.module('controllers', [])
   }
 })
 
-.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory) {
+.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $cordovaToast) {
   console.log('playlist detail control instantiated')
 
   // Grab variables from route paramaters
