@@ -62,12 +62,15 @@ angular.module('controllers', [])
   $scope.descending = false
 
   $scope.tracks = []
+  getTracks() // load tracks immediately
 
-  // Load in tracks when controller is instantiated
-  getTracks()
+  // Event Listeners
+  // Save changes on exit app or view change
+  $scope.$on("$ionicView.leave", $scope.saveChanges);
+  $ionicPlatform.on('pause', $scope.saveChanges);
 
   /**
-   * Get tracks for playlist usig playlist id and user id
+   * Get tracks for playlist using playlist id and user id
    */
   function getTracks() {
     Spotify.getPlaylist(userid, listid)
@@ -78,6 +81,10 @@ angular.module('controllers', [])
       })
   }
 
+  /**
+   * toggle edit mode variable
+   * reset ordering variables
+   */
   function toggleEditMode() {
     $scope.editMode = !$scope.editMode
 
@@ -86,6 +93,10 @@ angular.module('controllers', [])
     $scope.descending = false
   }
 
+  /**
+   * Display toast at bottom saying 'playlist saved'
+   * Function called whenever playlist is saved
+   */
   function showPlaylistSavedToast() {
     $cordovaToast.showWithOptions({
       message: "Playlist saved",
@@ -99,8 +110,104 @@ angular.module('controllers', [])
     })
   }
 
-  // Called whenever "order by" is changed or "descnding" is changed
-  // Sorts based on order criteria and whether user wants them to descend or not
+  /**
+   * code to execute when user taps edit button
+   * Calls saveChanges if attmpting to exiting edit mode
+   * Toggles edit mode ON if not in edit mode
+   */
+  $scope.onEditButtonTap = function() {
+    console.log('edit button tap')
+    if($scope.editMode) {
+      $scope.saveChanges()
+    } else {
+      toggleEditMode()
+    }
+  }
+
+  /**
+   * Called when item is reordered on DOM
+   * @param  {obj} item - object containing track info and metadata
+   * @param  {integer} fromIndex - index where the object was in $scope.tracks
+   * @param  {integer} toIndex - index where the object was moved to in $scope.tracks
+   */
+  $scope.onItemMove = function(item, fromIndex, toIndex) {
+    $scope.tracks.splice(fromIndex, 1)
+    $scope.tracks.splice(toIndex, 0, item)
+    $scope.$apply()
+
+    $scope.changesMade = true
+  }
+
+  /**
+   * Called when item deleted in DOM
+   * @param  {obj} item - object containing track info and metadata
+   */
+  $scope.onItemDelete = function(item) {
+    $scope.tracks.splice($scope.tracks.indexOf(item), 1)
+
+    $scope.changesMade = true
+  }
+
+   /**
+   * Sorts $scope.tracks on different criteria
+   * @param  {string} orderCriteria - value of select option
+   */
+  $scope.onSelectChange = function(orderCriteria) {
+    $scope.orderCriteria = orderCriteria
+    $scope.changesMade = true
+    orderSongs()
+  }
+
+  /**
+   * Run when user selects toggles the "descending" option
+   * @param  {boolean} descending - state of the "descending" toggle
+   */
+  $scope.onDescendToggle = function(descending) {
+    $scope.descending = descending
+    $scope.changesMade = true
+    orderSongs()
+  }
+
+  /**
+   * attempts post of new playlist state to Spotify if changes were made
+   */
+  $scope.saveChanges = function() {
+    if($scope.changesMade === false) {
+      console.log('no changes made')
+      toggleEditMode()
+    } else {
+      console.log('save changes')
+      let uris = []
+      $scope.tracks.forEach(item => uris.push(item.track.uri))
+      Spotify
+        .replacePlaylistTracks(userid, listid, uris)
+        .then(data => {
+          $scope.changesMade = false // reset after save
+          toggleEditMode()
+          showPlaylistSavedToast()
+        })
+        .catch(error => {
+          alert('There was an error saving changes.  Please try again.')
+          console.dir(error)
+        })
+    }
+  }
+
+  /**
+   * Code run when user selects "discard changes"
+   * Gets current tracklist from Spotify and updates DOM
+   */
+  $scope.cancelChanges = function() {
+    console.log('cancel changes')
+
+    getTracks()
+    toggleEditMode()
+  }
+
+  /**
+   * Called whenever "order by" is changed or "descnding" is changed
+   * Sorts based on order criteria and whether user wants them to descend or not
+   */
   function orderSongs() {
     console.log("$scope.orderCriteria", $scope.orderCriteria)
     console.log("$scope.descending", $scope.descending)
@@ -139,113 +246,7 @@ angular.module('controllers', [])
         })
         break
     }
-  }
-
-  $scope.onEditButtonTap = function() {
-    console.log('edit button tap')
-    if($scope.editMode) {
-      $scope.saveChanges()
-    } else {
-      toggleEditMode()
-    }
-  }
-
-  $scope.onItemMove = function(item, fromIndex, toIndex) {
-    $scope.tracks.splice(fromIndex, 1)
-    $scope.tracks.splice(toIndex, 0, item)
-    $scope.$apply()
-
-    $scope.changesMade = true
-  }
-
-  $scope.onItemDelete = function(item) {
-    $scope.tracks.splice($scope.tracks.indexOf(item), 1)
-
-    $scope.changesMade = true
-  }
-
-  /**
-   * Sorts $scope.tracks on different criteria
-   * @param  {string} orderCriteria - value of select option
-   */
-  $scope.onSelectChange = function(orderCriteria) {
-    $scope.orderCriteria = orderCriteria
-    $scope.changesMade = true
-    orderSongs()
-  }
-
-  $scope.onDescendToggle = function(descending) {
-    $scope.descending = descending
-    $scope.changesMade = true
-    orderSongs()
-  }
-
-  $scope.saveChanges = function() {
-    if($scope.changesMade === false) {
-      console.log('no changes made')
-      toggleEditMode()
-    } else {
-      console.log('save changes')
-      let uris = []
-      $scope.tracks.forEach(item => uris.push(item.track.uri))
-      Spotify
-        .replacePlaylistTracks(userid, listid, uris)
-        .then(data => {
-          $scope.changesMade = false // reset after save
-          toggleEditMode()
-          showPlaylistSavedToast()
-        })
-        .catch(error => {
-          alert('There was an error saving changes.  Please try again.')
-          console.dir(error)
-        })
-    }
-  }
-
-  $scope.cancelChanges = function() {
-    console.log('cancel changes')
-
-    getTracks()
-    toggleEditMode()
-  }
-
-  // Save playlist upon leaving view
-  $scope.$on("$ionicView.leave", $scope.saveChanges);
-
-  // Save playlist upon app going into background
-  $ionicPlatform.on('pause', $scope.saveChanges);
-})
-
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  console.log('chats ctrl instantiated')
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
-
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  console.log('chats detail ctrl instantiated')
-
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope, $cordovaOauth, Spotify) {
-  console.log('accounts ctrl instantiated')
-
-  $scope.settings = {
-    enableFriends: true
-  };
-
+  } // end orderSongs()
 })
 
 
