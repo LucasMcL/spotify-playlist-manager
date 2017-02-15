@@ -1,6 +1,6 @@
 // Initialize app
 // Inject dependencies
-angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
+angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
 
 .run(function($ionicPlatform, $state, $ionicHistory, $ionicPopup) {
   $ionicPlatform.ready(function() {
@@ -64,16 +64,7 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
       views: {
         'tab-search': {
           templateUrl: 'templates/tab-search.html',
-          controller: 'ChatsCtrl'
-        }
-      }
-    })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
-      views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
+          controller: 'SearchCtrl'
         }
       }
     })
