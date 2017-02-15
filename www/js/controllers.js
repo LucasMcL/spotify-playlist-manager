@@ -58,6 +58,8 @@ angular.module('controllers', [])
 
   $scope.editMode = false // toggled on and off
   $scope.changesMade = false // turned to true when first edit made
+  $scope.orderCriteria = "none"
+  $scope.descending = false
 
   $scope.tracks = []
 
@@ -78,6 +80,10 @@ angular.module('controllers', [])
 
   function toggleEditMode() {
     $scope.editMode = !$scope.editMode
+
+    // Reset these values when entering/exiting edit mode
+    $scope.orderCriteria = 'none'
+    $scope.descending = false
   }
 
   function showPlaylistSavedToast() {
@@ -91,6 +97,48 @@ angular.module('controllers', [])
     }).catch(error => {
       console.log(error)
     })
+  }
+
+  // Called whenever "order by" is changed or "descnding" is changed
+  // Sorts based on order criteria and whether user wants them to descend or not
+  function orderSongs() {
+    console.log("$scope.orderCriteria", $scope.orderCriteria)
+    console.log("$scope.descending", $scope.descending)
+
+    let returnVal
+    if($scope.descending === false) returnVal = -1
+    else returnVal = 1
+
+    switch($scope.orderCriteria) {
+      case 'song':
+        $scope.tracks.sort((a, b) => {
+          if (a.track.name < b.track.name) return returnVal;
+          if (a.track.name > b.track.name) return -returnVal;
+          return 0;
+        })
+        break
+      case 'artist':
+        $scope.tracks.sort((a, b) => {
+          if (a.track.artists[0].name < b.track.artists[0].name) return returnVal;
+          if (a.track.artists[0].name > b.track.artists[0].name) return -returnVal;
+          return 0;
+        })
+        break
+      case 'album':
+        $scope.tracks.sort((a, b) => {
+          if (a.track.album.name < b.track.album.name) return returnVal;
+          if (a.track.album.name > b.track.album.name) return -returnVal;
+          return 0;
+        })
+        break
+      case 'length':
+        $scope.tracks.sort((a, b) => {
+          if (a.track.duration_ms < b.track.duration_ms) return returnVal;
+          if (a.track.duration_ms > b.track.duration_ms) return -returnVal;
+          return 0;
+        })
+        break
+    }
   }
 
   $scope.onEditButtonTap = function() {
@@ -116,6 +164,22 @@ angular.module('controllers', [])
     $scope.changesMade = true
   }
 
+  /**
+   * Sorts $scope.tracks on different criteria
+   * @param  {string} orderCriteria - value of select option
+   */
+  $scope.onSelectChange = function(orderCriteria) {
+    $scope.orderCriteria = orderCriteria
+    $scope.changesMade = true
+    orderSongs()
+  }
+
+  $scope.onDescendToggle = function(descending) {
+    $scope.descending = descending
+    $scope.changesMade = true
+    orderSongs()
+  }
+
   $scope.saveChanges = function() {
     if($scope.changesMade === false) {
       console.log('no changes made')
@@ -136,11 +200,11 @@ angular.module('controllers', [])
           console.dir(error)
         })
     }
-
   }
 
   $scope.cancelChanges = function() {
     console.log('cancel changes')
+
     getTracks()
     toggleEditMode()
   }
