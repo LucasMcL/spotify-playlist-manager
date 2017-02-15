@@ -64,11 +64,6 @@ angular.module('controllers', [])
   $scope.tracks = []
   getTracks() // load tracks immediately
 
-  // Event Listeners
-  // Save changes on exit app or view change
-  $scope.$on("$ionicView.leave", $scope.saveChanges);
-  $ionicPlatform.on('pause', $scope.saveChanges);
-
   /**
    * Get tracks for playlist using playlist id and user id
    */
@@ -247,6 +242,11 @@ angular.module('controllers', [])
         break
     }
   } // end orderSongs()
+
+  // Event Listeners
+  // Save changes on exit app or view change
+  $scope.$on("$ionicView.leave", $scope.saveChanges);
+  $ionicPlatform.on('pause', $scope.saveChanges);
 })
 
 .controller('ChatsCtrl', function($scope, Chats) {
