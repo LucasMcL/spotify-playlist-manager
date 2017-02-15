@@ -58,7 +58,7 @@ angular.module('controllers', [])
 
   $scope.editMode = false // toggled on and off
   $scope.changesMade = false // turned to true when first edit made
-  $scope.orderCriteria = ""
+  $scope.orderCriteria = "none"
 
   $scope.tracks = []
 
@@ -117,11 +117,44 @@ angular.module('controllers', [])
     $scope.changesMade = true
   }
 
+  /**
+   * Sorts $scope.tracks on different criteria
+   * @param  {string} orderCriteria - value of select option
+   */
   $scope.onSelectChange = function(orderCriteria) {
-    // attach variable to this scope
     $scope.orderCriteria = orderCriteria
-
     $scope.changesMade = true
+    switch(orderCriteria) {
+      case 'song':
+        $scope.tracks.sort((a, b) => {
+          if (a.track.name < b.track.name) return -1;
+          if (a.track.name > b.track.name) return 1;
+          return 0;
+        })
+        break
+      case 'artist':
+        console.log('artist')
+        $scope.tracks.sort((a, b) => {
+          if (a.track.artists[0].name < b.track.artists[0].name) return -1;
+          if (a.track.artists[0].name > b.track.artists[0].name) return 1;
+          return 0;
+        })
+        break
+      case 'album':
+        $scope.tracks.sort((a, b) => {
+          if (a.track.album.name < b.track.album.name) return -1;
+          if (a.track.album.name > b.track.album.name) return 1;
+          return 0;
+        })
+        break
+      case 'length':
+        $scope.tracks.sort((a, b) => {
+          if (a.track.duration_ms < b.track.duration_ms) return -1;
+          if (a.track.duration_ms > b.track.duration_ms) return 1;
+          return 0;
+        })
+        break
+    }
   }
 
   $scope.saveChanges = function() {

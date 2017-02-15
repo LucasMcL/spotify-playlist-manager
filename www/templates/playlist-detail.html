@@ -9,24 +9,27 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
   </ion-nav-buttons>
   <ion-content class="padding">
 
+    <!-- Order songs by: -->
     <ion-item class="item-input item-select" ng-show="editMode">
       <div class="input-label">
         Order by
       </div>
       <select ng-model="orderCriteria" ng-change="onSelectChange(orderCriteria)">
-        <option selected value="">None</option>
-        <option value="track.name">Song</option>
-        <option value="track.artists[0].name">Artist</option>
-        <option value="track.album.name">Album</option>
-        <option value="">Date Added</option>
-        <option value="">Song length</option>
+        <option selected value="none">None</option>
+        <option value="song">Song</option>
+        <option value="artist">Artist</option>
+        <option value="album">Album</option>
+        <option value="length">Song length</option>
       </select>
     </ion-item>
+
+    <!-- Ascending / Descending -->
+    <ion-toggle ng-model="desceding" ng-hide="orderCriteria === 'none'">Descending?</ion-toggle>
 
     <!-- Playlist songs -->
     <ion-list show-reorder="editMode", show-delete="editMode">
 
-      <ion-item ng-repeat="item in tracks | orderBy:orderCriteria">
+      <ion-item ng-repeat="item in tracks">
         <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
         </ion-delete-button>
         <h3>{{item.track.name}}</h3>
