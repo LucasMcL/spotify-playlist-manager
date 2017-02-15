@@ -59,11 +59,11 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
     })
 
   // Nav stack for create tab
-  .state('tab.chats', {
-      url: '/chats',
+  .state('tab.search', {
+      url: '/search',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
+        'tab-search': {
+          templateUrl: 'templates/tab-search.html',
           controller: 'ChatsCtrl'
         }
       }
