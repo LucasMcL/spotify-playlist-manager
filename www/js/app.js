@@ -1,6 +1,6 @@
 // Initialize app
 // Inject dependencies
-angular.module('playlist-manager', ['ionic', 'controllers', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
+angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
 
 .run(function($ionicPlatform, $state, $ionicHistory, $ionicPopup) {
   $ionicPlatform.ready(function() {
