@@ -15,6 +15,10 @@ angular.module('SearchCtrl', [])
     Playlists.get().then(playlists => $scope.playlists = playlists)
   })
 
+  $scope.$on("$ionicView.enter", function() {
+    Auth.verifyToken()
+  })
+
   const SEARCH_BY = 'artist,track'
 
   $scope.onSubmit = function(query) {

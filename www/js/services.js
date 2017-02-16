@@ -7,6 +7,26 @@ angular.module('services', [])
   return {
     getCurrentUser: function() {
       return Spotify.getCurrentUser().then(user => { return user.id })
+    },
+    verifyToken: function() {
+      let storedToken = window.localStorage.getItem('spotify-token')
+      console.log('checking for stored token')
+      if(storedToken) {
+        Spotify.setAuthToken(storedToken)
+        console.log('Stored token found')
+      } else {
+        console.log('Stored token not found.  Prompting user for login')
+        Auth.performLogin()
+      }
+    },
+    performLogin: function() {
+      $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
+        console.log("login successful")
+        window.localStorage.setItem('spotify-token', result.access_token)
+        Spotify.setAuthToken(result.access_token)
+      }, function(error) {
+        console.dir(error)
+      })
     }
   }
 })
