@@ -3,12 +3,14 @@ angular.module('SearchCtrl', [])
 .controller('SearchCtrl', function($scope, Spotify) {
   console.log('SearchCtrl instantiated')
 
-  // Spotify.getCurrentUser().then(function (data) {
-  //   console.dir(data);
-  // })
 
+  $scope.userid = ""
   $scope.trackResults = []
   $scope.artistResults = []
+
+  Spotify.getCurrentUser().then(function (data) {
+    $scope.userid = data.id
+  })
 
   const SEARCH_BY = 'artist,track'
 
