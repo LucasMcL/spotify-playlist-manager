@@ -15,8 +15,6 @@ angular.module('SearchCtrl', [])
   const SEARCH_BY = 'artist,track'
 
   $scope.onSubmit = function(query) {
-  	// Make spotify api call here
-  	// Update $scope.trackResults and $scope.artistResults
 
   	Spotify
   		 .search(query, SEARCH_BY, {limit: 5})
@@ -28,6 +26,8 @@ angular.module('SearchCtrl', [])
   }
 })
 
-.controller('ArtistDetailCtrl', function($scope, Spotify) {
-	$scope.myVar = 'potatos'
+.controller('ArtistDetailCtrl', function($scope, Spotify, $stateParams) {
+  $scope.artistid = $stateParams.artistid
+  $scope.artistName = $stateParams.artistName
+  $scope.userid = $stateParams.userid
 })
