@@ -1,46 +1,19 @@
 angular.module('SearchCtrl', [])
 
-.controller('SearchCtrl', function($scope, Spotify, Playlists) {
+.controller('SearchCtrl', function($scope, Spotify, Playlists, Auth) {
   console.log('SearchCtrl instantiated')
 
   $scope.userid = ""
   $scope.trackResults = []
   $scope.artistResults = []
   $scope.playlistids = []
+  $scope.playlists = []
 
-  // Get current user every time the user navigates to this view
-  $scope.$on("$ionicView.enter", function() {
-    $scope.updateInfo()
-  })
-
+  // Get current user's playlists upon entering this view
   $scope.$on("$ionicView.enter", function() {
     console.log('getting playlists')
-    Playlists.get('testuserspotifyapp').then(response => {console.dir(response)})
+    Playlists.get().then(playlists => $scope.playlists = playlists)
   })
-
-  // This function copied from PlaylistsCtrl.js
-  // Abstract to factory maybe?
-  $scope.updateInfo = function() {
-    console.log('updating info')
-    Spotify.getCurrentUser().then(function (data) {
-      $scope.userid = data.id
-      $scope.getUserPlaylists(data.id)
-    }).catch(function(error) {
-      console.dir(error)
-    })
-  }
-
-  // This function copied from PlaylistsCtrl.js
-  // Abstract to factory maybe?
-  $scope.getUserPlaylists = function(userid) {
-    console.log('getting playlist ids')
-    Spotify.getUserPlaylists(userid).then(function (data) {
-      $scope.playlistids = []
-      data.items.forEach(item => $scope.playlistids.push(item.id))
-    }).catch(function(error) {
-      console.dir(error)
-    })
-  }
 
   const SEARCH_BY = 'artist,track'
 

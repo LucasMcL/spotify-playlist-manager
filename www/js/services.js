@@ -4,29 +4,36 @@ angular.module('services', [])
   const CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
   const SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
-  // Work in progress
-  // Return promise that returns access token
-  function performLogin() {
-    console.log('performing login')
-    $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
-      console.log("login successful")
-      window.localStorage.setItem('spotify-token', result.access_token)
-      Spotify.setAuthToken(result.access_token)
-      $scope.updateInfo()
-    }, function(error) {
-      console.log('Error -> ' + error)
-    })
+  return {
+    getCurrentUser: function() {
+      return Spotify.getCurrentUser().then(user => { return user.id })
+    }
   }
-
-
-  // Private
-
 })
 
-.factory('Playlists', function(Spotify) {
+.factory('Playlists', function(Spotify, Auth) {
   return {
-    get: function(userid) {
-      return Spotify.getUserPlaylists(userid).then(data => { return data.items })
+    /**
+     * Fetches current user's id, then returns array of playlists
+     * @return {array} - array of playlist objects
+     */
+    get: function() {
+      return Auth.getCurrentUser().then(userid => {
+        return Spotify.getUserPlaylists(userid).then(data => data.items)
+      })
+    },
+    /**
+     * Fetches current user's id, then playlists, then returns array of playlist ids
+     * @return {array} - array of playlist ids
+     */
+    getIds: function() {
+      return Auth.getCurrentUser().then(userid => {
+        return Spotify.getUserPlaylists(userid).then(data => {
+          let ids = []
+          data.items.forEach(item => ids.push(item.id))
+          return ids
+        })
+      })
     }
   }
 })
