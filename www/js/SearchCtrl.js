@@ -5,5 +5,5 @@ angular.module('SearchCtrl', [])
 
   Spotify.getCurrentUser().then(function (data) {
     console.dir(data);
-  });
+  })
 })
