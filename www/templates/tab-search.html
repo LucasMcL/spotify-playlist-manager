@@ -16,21 +16,23 @@
     <!-- Track Results -->
     <ion-list>
       <ion-item class="item-divider">
-        Tracks
+        Tracks - top results
       </ion-item>
       <ion-item ng-repeat="item in trackResults">
-        {{item}}
+        <h3>{{item.name}}</h3>
+        <p>{{item.artists[0].name}} • {{item.album.name}}</p>
       </ion-item>
     </ion-list>
 
     <!-- Artist Results -->
     <ion-list>
       <ion-item class="item-divider">
-        Artists
+        Artists - top results
       </ion-item>
-      <ion-item ng-repeat="item in artistResults">
-        {{item}}
-      </ion-item>
+      <a ng-repeat="item in artistResults" class="item-avatar item" href="#">
+        <img ng-src="{{item.images[2].url}}">
+        <h2>{{item.name}}</h2>
+      </a>
     </ion-list>
 
   </ion-content>

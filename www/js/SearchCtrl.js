@@ -7,8 +7,8 @@ angular.module('SearchCtrl', [])
   //   console.dir(data);
   // })
 
-  $scope.trackResults = ['apple', 'banana']
-  $scope.artistResults = ['cucumber', 'durian fruit']
+  $scope.trackResults = []
+  $scope.artistResults = []
 
   const SEARCH_BY = 'artist,track'
 
@@ -17,7 +17,11 @@ angular.module('SearchCtrl', [])
   	// Update $scope.trackResults and $scope.artistResults
 
   	Spotify
-  		 .search(query, SEARCH_BY, {limit: 3})
-  		 .then(data => console.dir(data))
+  		 .search(query, SEARCH_BY, {limit: 5})
+  		 .then(data => {
+  		 		$scope.trackResults = data.tracks.items
+  		 		$scope.artistResults = data.artists.items
+  		 })
+
   }
 })
