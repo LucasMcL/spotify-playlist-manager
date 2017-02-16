@@ -10,7 +10,6 @@ angular.module('PlaylistsCtrl', [])
 
   $ionicPlatform.ready(function() {
     let storedToken = window.localStorage.getItem('spotify-token')
-    // let storedToken = null
     console.log('checking for stored token')
     if(storedToken) {
       Spotify.setAuthToken(storedToken)

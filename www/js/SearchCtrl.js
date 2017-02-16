@@ -1,6 +1,6 @@
 angular.module('SearchCtrl', [])
 
-.controller('SearchCtrl', function($scope, Spotify) {
+.controller('SearchCtrl', function($scope, Spotify, Playlists) {
   console.log('SearchCtrl instantiated')
 
   $scope.userid = ""
@@ -11,6 +11,11 @@ angular.module('SearchCtrl', [])
   // Get current user every time the user navigates to this view
   $scope.$on("$ionicView.enter", function() {
     $scope.updateInfo()
+  })
+
+  $scope.$on("$ionicView.enter", function() {
+    console.log('getting playlists')
+    Playlists.get('testuserspotifyapp').then(response => {console.dir(response)})
   })
 
   // This function copied from PlaylistsCtrl.js

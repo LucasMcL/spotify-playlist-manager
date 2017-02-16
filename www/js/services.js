@@ -1,50 +1,32 @@
 angular.module('services', [])
 
-.factory('Chats', function() {
-  console.log('chats factory instantiated')
+.factory('Auth', function($cordovaOauth, Spotify) {
+  const CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
+  const SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
-  // Some fake testing data
-  var chats = [{
-    id: 0,
-    name: 'Ben Sparrow',
-    lastText: 'You on your way?',
-    face: 'img/ben.png'
-  }, {
-    id: 1,
-    name: 'Max Lynx',
-    lastText: 'Hey, it\'s me',
-    face: 'img/max.png'
-  }, {
-    id: 2,
-    name: 'Adam Bradleyson',
-    lastText: 'I should buy a boat',
-    face: 'img/adam.jpg'
-  }, {
-    id: 3,
-    name: 'Perry Governor',
-    lastText: 'Look at my mukluks!',
-    face: 'img/perry.png'
-  }, {
-    id: 4,
-    name: 'Mike Harrington',
-    lastText: 'This is wicked good ice cream.',
-    face: 'img/mike.png'
-  }];
+  // Work in progress
+  // Return promise that returns access token
+  function performLogin() {
+    console.log('performing login')
+    $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
+      console.log("login successful")
+      window.localStorage.setItem('spotify-token', result.access_token)
+      Spotify.setAuthToken(result.access_token)
+      $scope.updateInfo()
+    }, function(error) {
+      console.log('Error -> ' + error)
+    })
+  }
 
+
+  // Private
+
+})
+
+.factory('Playlists', function(Spotify) {
   return {
-    all: function() {
-      return chats;
-    },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
-    },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
-        }
-      }
-      return null;
+    get: function(userid) {
+      return Spotify.getUserPlaylists(userid).then(data => { return data.items })
     }
-  };
-});
+  }
+})
