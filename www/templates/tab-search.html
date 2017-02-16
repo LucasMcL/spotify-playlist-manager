@@ -2,14 +2,36 @@
   <ion-content>
 
     <!-- Search Bar -->
-    <div class="item item-input-inset">
+    <form class="item item-input-inset" ng-submit="onSubmit(query)">
       <label class="item-input-wrapper">
-        <input type="text" placeholder="Search">
+        <!-- query doesn't exist on scope of SearchCtrl -->
+        <!-- Must be passed to ctrl through onSubmit function -->
+        <input type="text" placeholder="Search" ng-model="query">
       </label>
       <button class="button button-small">
         Submit
       </button>
-    </div>
+    </form>
+
+    <!-- Track Results -->
+    <ion-list>
+      <ion-item class="item-divider">
+        Tracks
+      </ion-item>
+      <ion-item ng-repeat="item in trackResults">
+        {{item}}
+      </ion-item>
+    </ion-list>
+
+    <!-- Artist Results -->
+    <ion-list>
+      <ion-item class="item-divider">
+        Artists
+      </ion-item>
+      <ion-item ng-repeat="item in artistResults">
+        {{item}}
+      </ion-item>
+    </ion-list>
 
   </ion-content>
 </ion-view>
