@@ -29,7 +29,7 @@
       <ion-item class="item-divider">
         Artists - top results
       </ion-item>
-      <a ng-repeat="item in artistResults" class="item-avatar item" href="#">
+      <a ng-repeat="item in artistResults" class="item-avatar item" ui-sref="tab.artist-detail">
         <img ng-src="{{item.images[2].url}}">
         <h2>{{item.name}}</h2>
       </a>

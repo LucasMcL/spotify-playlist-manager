@@ -25,3 +25,7 @@ angular.module('SearchCtrl', [])
 
   }
 })
+
+.controller('ArtistDetailCtrl', function($scope, Spotify) {
+	$scope.myVar = 'potatos'
+})

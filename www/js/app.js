@@ -58,13 +58,22 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
       }
     })
 
-  // Nav stack for create tab
+  // Nav stack for Search tab
   .state('tab.search', {
       url: '/search',
       views: {
         'tab-search': {
           templateUrl: 'templates/tab-search.html',
           controller: 'SearchCtrl'
+        }
+      }
+    })
+    .state('tab.artist-detail', {
+      url: 'search/artist-detail',
+      views: {
+        'tab-search': {
+          templateUrl: 'templates/artist-detail.html',
+          controller: 'ArtistDetailCtrl',
         }
       }
     })
