@@ -12,11 +12,9 @@ angular.module('SearchCtrl', [])
   // Get current user's playlists upon entering this view
   $scope.$on("$ionicView.enter", function() {
     console.log('getting playlists')
-    Playlists.get().then(playlists => $scope.playlists = playlists)
-  })
-
-  $scope.$on("$ionicView.enter", function() {
+    console.log('verifying auth')
     Auth.verifyToken()
+    Playlists.get().then(playlists => $scope.playlists = playlists)
   })
 
   const SEARCH_BY = 'artist,track'

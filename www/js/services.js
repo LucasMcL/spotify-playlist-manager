@@ -4,6 +4,17 @@ angular.module('services', [])
   const CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
   const SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
+  function performLogin() {
+    console.log('Stored token not found.  Prompting user for login')
+    $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
+      console.log("login successful")
+      window.localStorage.setItem('spotify-token', result.access_token)
+      Spotify.setAuthToken(result.access_token)
+    }, function(error) {
+      console.dir(error)
+    })
+  }
+
   return {
     getCurrentUser: function() {
       return Spotify.getCurrentUser().then(user => { return user.id })
@@ -15,18 +26,8 @@ angular.module('services', [])
         Spotify.setAuthToken(storedToken)
         console.log('Stored token found')
       } else {
-        console.log('Stored token not found.  Prompting user for login')
-        Auth.performLogin()
+        performLogin()
       }
-    },
-    performLogin: function() {
-      $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
-        console.log("login successful")
-        window.localStorage.setItem('spotify-token', result.access_token)
-        Spotify.setAuthToken(result.access_token)
-      }, function(error) {
-        console.dir(error)
-      })
     }
   }
 })
