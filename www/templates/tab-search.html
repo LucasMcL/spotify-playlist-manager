@@ -29,11 +29,13 @@
       <ion-item class="item-divider">
         Artists - top results
       </ion-item>
-        <a ng-repeat="item in artistResults" class="item-avatar item" ui-sref="tab.artist-detail({artistid: item.id, artistName: item.name, userid: userid})">
+      <a ng-repeat="item in artistResults" class="item-avatar item" ui-sref="tab.artist-detail({artistid: item.id, artistName: item.name, userid: userid})">
         <img ng-src="{{item.images[2].url}}">
         <h2>{{item.name}}</h2>
       </a>
     </ion-list>
+
+    <p>{{playlistids}}</p>
 
   </ion-content>
 </ion-view>

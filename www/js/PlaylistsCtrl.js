@@ -3,8 +3,8 @@ angular.module('PlaylistsCtrl', [])
 .controller('PlaylistsCtrl', function($scope, $ionicPlatform, $cordovaOauth, Spotify) {
   console.log('playlist control instantiated')
 
-  let CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
-  let SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
+  const CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
+  const SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
   $scope.playlists = []
 
