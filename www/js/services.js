@@ -37,7 +37,7 @@ angular.module('services', [])
    *   -If not found, prompts user for login then sets auth token
    * @return {Promise} - Returns promise either after token is found, or after login succeeded
    */
-  function verifyToken() {
+  function verify() {
     let storedToken = window.localStorage.getItem('spotify-token')
     console.log('checking for stored token')
     if(storedToken) {
@@ -51,7 +51,7 @@ angular.module('services', [])
 
   return {
     getCurrentUser,
-    verifyToken
+    verify
   }
 })
 
