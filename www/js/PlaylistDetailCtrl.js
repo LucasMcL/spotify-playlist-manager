@@ -181,6 +181,8 @@ angular.module('PlaylistDetailCtrl', [])
         insert_before: editLog[editCounter].toIndex + 1
       }).then(() => {
         console.log(`${editCounter}: move sent`)
+        console.log("editLog[editCounter].fromIndex", editLog[editCounter].fromIndex)
+        console.log("editLog[editCounter].toIndex", editLog[editCounter].toIndex)
         editCounter++
         commitChange()
       })
