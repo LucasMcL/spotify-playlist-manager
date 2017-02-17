@@ -15,6 +15,7 @@ angular.module('PlaylistDetailCtrl', [])
   $scope.descending = false
 
   $scope.tracks = []
+  let userEdits = []
   getTracks() // load tracks immediately
 
   /**
