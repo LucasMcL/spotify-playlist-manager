@@ -205,6 +205,21 @@ angular.module('PlaylistDetailCtrl', [])
   // Save changes on exit app or view change
   $scope.$on("$ionicView.leave", $scope.saveChanges);
   $ionicPlatform.on('pause', $scope.saveChanges);
+
+  let myArray = ['apples', 'bananas', 'blueberries', 'crumpets']
+
+  let i = 0
+  console.log(i)
+  $scope.addSongs = function() {
+    if (i >= 3) return
+    console.log(i)
+    Spotify
+      .addPlaylistTracks(userid, listid, 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh')
+      .then(() => {
+        i++
+        $scope.addSongs()
+      })
+  }
 })
 
 
