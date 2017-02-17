@@ -15,7 +15,6 @@ angular.module('PlaylistDetailCtrl', [])
   $scope.descending = false
 
   $scope.tracks = []
-  let userEdits = []
   getTracks() // load tracks immediately
 
   /**
@@ -55,9 +54,9 @@ angular.module('PlaylistDetailCtrl', [])
   function showPlaylistSavedToast() {
     $cordovaToast.showWithOptions({
       message: "Playlist saved",
-      duration: "short", // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself.
+      duration: "short",
       position: "bottom",
-      addPixelsY: -175  // added a negative value to move it up a bit (default 0)
+      addPixelsY: -175  // move up above tabs
     }).catch(error => {
       console.log(error)
     })
