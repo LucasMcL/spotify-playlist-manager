@@ -89,6 +89,8 @@ angular.module('PlaylistDetailCtrl', [])
     $scope.tracks.splice(toIndex, 0, item)
     $scope.$apply()
 
+    if(toIndex > fromIndex) toIndex++
+
     editLog.push({
       type: 'move',
       uri: item.track.uri,
@@ -178,11 +180,9 @@ angular.module('PlaylistDetailCtrl', [])
     } else if(editLog[editCounter].type === "move") {
       Spotify.reorderPlaylistTracks(userid, listid, {
         range_start: editLog[editCounter].fromIndex,
-        insert_before: editLog[editCounter].toIndex + 1
+        insert_before: editLog[editCounter].toIndex
       }).then(() => {
         console.log(`${editCounter}: move sent`)
-        console.log("editLog[editCounter].fromIndex", editLog[editCounter].fromIndex)
-        console.log("editLog[editCounter].toIndex", editLog[editCounter].toIndex)
         editCounter++
         commitChange()
       })
