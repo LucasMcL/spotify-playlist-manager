@@ -10,9 +10,7 @@ angular.module('services', [])
    * @return {promise} - Returns promise that resolves after user logs in
    */
   function performLogin() {
-    console.log('Stored token not found.  Prompting user for login')
     return $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
-      console.log("login successful")
       window.localStorage.setItem('spotify-token', result.access_token)
       Spotify.setAuthToken(result.access_token)
     }, function(error) {
@@ -39,9 +37,8 @@ angular.module('services', [])
    */
   function verify() {
     let storedToken = window.localStorage.getItem('spotify-token')
-    console.log('checking for stored token')
+    console.log('checking for Auth')
     if(storedToken) {
-      console.log('Stored token found')
       Spotify.setAuthToken(storedToken)
       return Promise.resolve()
     } else {

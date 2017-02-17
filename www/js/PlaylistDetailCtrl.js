@@ -30,15 +30,21 @@ angular.module('PlaylistDetailCtrl', [])
   }
 
   /**
-   * toggle edit mode variable
-   * reset ordering variables
+   * Utility functions for entering / exiting edit mode
    */
-  function toggleEditMode() {
-    $scope.editMode = !$scope.editMode
-
-    // Reset these values when entering/exiting edit mode
+  function resetSortOptions() {
     $scope.orderCriteria = 'none'
     $scope.descending = false
+  }
+
+  function enterEditMode() {
+    resetSortOptions()
+    $scope.editMode = true
+  }
+
+  function exitEditMode() {
+    resetSortOptions()
+    $scope.editMode = false
   }
 
   /**
@@ -51,8 +57,6 @@ angular.module('PlaylistDetailCtrl', [])
       duration: "short", // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself.
       position: "bottom",
       addPixelsY: -175  // added a negative value to move it up a bit (default 0)
-    }).then(success => {
-      console.log(success)
     }).catch(error => {
       console.log(error)
     })
@@ -65,10 +69,11 @@ angular.module('PlaylistDetailCtrl', [])
    */
   $scope.onEditButtonTap = function() {
     console.log('edit button tap')
+    // If leaving edit mode...
     if($scope.editMode) {
       $scope.saveChanges()
     } else {
-      toggleEditMode()
+      enterEditMode()
     }
   }
 
@@ -122,7 +127,7 @@ angular.module('PlaylistDetailCtrl', [])
   $scope.saveChanges = function() {
     if($scope.changesMade === false) {
       console.log('no changes made')
-      toggleEditMode()
+      exitEditMode()
     } else {
       console.log('save changes')
       let uris = []
@@ -131,7 +136,7 @@ angular.module('PlaylistDetailCtrl', [])
         .replacePlaylistTracks(userid, listid, uris)
         .then(data => {
           $scope.changesMade = false // reset after save
-          toggleEditMode()
+          exitEditMode()
           showPlaylistSavedToast()
         })
         .catch(error => {
@@ -149,7 +154,7 @@ angular.module('PlaylistDetailCtrl', [])
     console.log('cancel changes')
 
     getTracks()
-    toggleEditMode()
+    exitEditMode()
   }
 
   /**
