@@ -12,7 +12,7 @@ angular.module('SearchCtrl', [])
   // Perform auth check on view enter
   // Load in playlists after that resolves
   $scope.$on("$ionicView.enter", function() {
-    Auth.verify().then(() => console.log('Auth has done been checked'))
+    Auth.verify().then(() => console.log('Auth has done been checked in the search ctrl'))
   })
 
   const SEARCH_BY = 'artist,track'
