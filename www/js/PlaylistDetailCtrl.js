@@ -13,6 +13,7 @@ angular.module('PlaylistDetailCtrl', [])
   $scope.changesMade = false // turned to true when first edit made
   $scope.orderCriteria = "none"
   $scope.descending = false
+  let editLog = []
 
   $scope.tracks = []
   getTracks() // load tracks immediately
@@ -88,6 +89,13 @@ angular.module('PlaylistDetailCtrl', [])
     $scope.tracks.splice(toIndex, 0, item)
     $scope.$apply()
 
+    editLog.push({
+      type: 'move',
+      uri: item.track.uri,
+      fromIndex,
+      toIndex
+    })
+
     $scope.changesMade = true
   }
 
@@ -97,6 +105,11 @@ angular.module('PlaylistDetailCtrl', [])
    */
   $scope.onItemDelete = function(item) {
     $scope.tracks.splice($scope.tracks.indexOf(item), 1)
+
+    editLog.push({
+      type: 'delete',
+      uri: item.track.uri
+    })
 
     $scope.changesMade = true
   }
@@ -130,19 +143,47 @@ angular.module('PlaylistDetailCtrl', [])
       exitEditMode()
     } else {
       console.log('save changes')
-      let uris = []
-      $scope.tracks.forEach(item => uris.push(item.track.uri))
+      commitChange()
+      // let uris = []
+      // $scope.tracks.forEach(item => uris.push(item.track.uri))
+      // Spotify
+      //   .replacePlaylistTracks(userid, listid, uris)
+      //   .then(data => {
+      //     $scope.changesMade = false // reset after save
+      //     exitEditMode()
+      //     showPlaylistSavedToast()
+      //   })
+      //   .catch(error => {
+      //     alert('There was an error saving changes.  Please try again.')
+      //     console.dir(error)
+      //   })
+    }
+  }
+
+  let editCounter = 0
+  function commitChange() {
+    if(editCounter >= editLog.length) {
+      editCounter = 0
+      editLog = []
+      return
+    }
+    if(editLog[editCounter].type === "delete") {
       Spotify
-        .replacePlaylistTracks(userid, listid, uris)
-        .then(data => {
-          $scope.changesMade = false // reset after save
-          exitEditMode()
-          showPlaylistSavedToast()
+        .removePlaylistTracks(userid, listid, editLog[editCounter].uri)
+        .then(() => {
+          console.log(`${editCounter}: delete sent`)
+          editCounter++
+          commitChange()
         })
-        .catch(error => {
-          alert('There was an error saving changes.  Please try again.')
-          console.dir(error)
-        })
+    } else if(editLog[editCounter].type === "move") {
+      Spotify.reorderPlaylistTracks(userid, listid, {
+        range_start: editLog[editCounter].fromIndex,
+        insert_before: editLog[editCounter].toIndex + 1
+      }).then(() => {
+        console.log(`${editCounter}: move sent`)
+        editCounter++
+        commitChange()
+      })
     }
   }
 
@@ -205,21 +246,6 @@ angular.module('PlaylistDetailCtrl', [])
   // Save changes on exit app or view change
   $scope.$on("$ionicView.leave", $scope.saveChanges);
   $ionicPlatform.on('pause', $scope.saveChanges);
-
-  let myArray = ['apples', 'bananas', 'blueberries', 'crumpets']
-
-  let i = 0
-  console.log(i)
-  $scope.addSongs = function() {
-    if (i >= 3) return
-    console.log(i)
-    Spotify
-      .addPlaylistTracks(userid, listid, 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh')
-      .then(() => {
-        i++
-        $scope.addSongs()
-      })
-  }
 })
 
 
