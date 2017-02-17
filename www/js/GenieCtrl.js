@@ -1,14 +1,13 @@
 angular.module('GenieCtrl', [])
 
-.controller('AccountCtrl', function($scope, $cordovaOauth, Spotify) {
+.controller('AccountCtrl', function($scope, $cordovaOauth, Spotify, Auth) {
   console.log('accounts ctrl instantiated')
 
-  const CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
-  const SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
-
-  $scope.settings = {
-    enableFriends: true
-  };
+  $scope.$on("$ionicView.enter", function() {
+    Auth.verify().then(() => {
+      console.log('auth has done been checked in the account ctrl')
+    })
+  })
 
   $scope.clearCookies = function() {
   	console.log('clearing cookies')
