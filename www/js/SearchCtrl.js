@@ -9,12 +9,10 @@ angular.module('SearchCtrl', [])
   $scope.playlistids = []
   $scope.playlists = []
 
-  // Get current user's playlists upon entering this view
+  // Perform auth check on view enter
+  // Load in playlists after that resolves
   $scope.$on("$ionicView.enter", function() {
-    console.log('getting playlists')
-    console.log('verifying auth')
-    Auth.verifyToken()
-    Playlists.get().then(playlists => $scope.playlists = playlists)
+    Auth.verifyToken().then(() => console.log('Auth has done been checked'))
   })
 
   const SEARCH_BY = 'artist,track'
