@@ -106,14 +106,23 @@ angular.module('services', [])
         i = 0
         return
       }
-      console.log(`${i}: moving track from ${remaining.indexOf(newUris[i])} to before ${i}`)
-      Spotify.reorderPlaylistTracks(userid, listid, {
-        range_start: remaining.indexOf(newUris[i]),
-        insert_before: i
-      }).then(() => {
-        i++
-        reorderTracks()
-      })
+      range_start = remaining.indexOf(newUris[i])
+      insert_before = i
+      console.log(`${i}: moving track from ${range_start} to before ${insert_before}`)
+
+      Spotify
+        .reorderPlaylistTracks(userid, listid, {range_start, insert_before})
+        .then(() => {
+          i++
+          updateRemaining()
+          reorderTracks()
+        })
+    }
+
+    function updateRemaining() {
+      let uri = remaining[range_start]
+      remaining.splice(range_start, 1)
+      remaining.splice(insert_before, 0, uri)
     }
   }
 })
