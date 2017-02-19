@@ -45,7 +45,9 @@ angular.module('PlaylistDetailCtrl', [])
 
   function exitEditMode() {
     resetSortOptions()
+
     $scope.editMode = false
+    $scope.changesMade = false
   }
 
   /**
@@ -152,8 +154,8 @@ angular.module('PlaylistDetailCtrl', [])
       //   .replacePlaylistTracks(userid, listid, uris)
       //   .then(data => {
       //     $scope.changesMade = false // reset after save
-      //     exitEditMode()
-      //     showPlaylistSavedToast()
+          // exitEditMode()
+          // showPlaylistSavedToast()
       //   })
       //   .catch(error => {
       //     alert('There was an error saving changes.  Please try again.')
@@ -171,6 +173,8 @@ angular.module('PlaylistDetailCtrl', [])
   function commitChange() {
     // Exit recursive loop if you've reached (or accidentally exceeded) the array length
     if(editCounter >= editLog.length) {
+      exitEditMode()
+      showPlaylistSavedToast()
       editCounter = 0
       editLog = []
       return
