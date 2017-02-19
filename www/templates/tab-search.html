@@ -1,0 +1,39 @@
+<ion-view view-title="Search Arist or Track">
+  <ion-content>
+
+    <!-- Search Bar -->
+    <form class="item item-input-inset" ng-submit="onSubmit(query)">
+      <label class="item-input-wrapper">
+        <!-- query doesn't exist on scope of SearchCtrl -->
+        <!-- Must be passed to ctrl through onSubmit function -->
+        <input type="text" placeholder="Search" ng-model="query">
+      </label>
+      <button class="button button-small">
+        Submit
+      </button>
+    </form>
+
+    <!-- Track Results -->
+    <ion-list>
+      <ion-item class="item-divider">
+        Tracks - top results
+      </ion-item>
+      <ion-item ng-repeat="item in trackResults">
+        <h3>{{item.name}}</h3>
+        <p>{{item.artists[0].name}} • {{item.album.name}}</p>
+      </ion-item>
+    </ion-list>
+
+    <!-- Artist Results -->
+    <ion-list>
+      <ion-item class="item-divider">
+        Artists - top results
+      </ion-item>
+      <a ng-repeat="item in artistResults" class="item-avatar item" ui-sref="tab.artist-detail({artistid: item.id, artistName: item.name, userid: userid})">
+        <img ng-src="{{item.images[2].url}}">
+        <h2>{{item.name}}</h2>
+      </a>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

@@ -1,8 +1,8 @@
 // Initialize app
 // Inject dependencies
-angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
+angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
 
-.run(function($ionicPlatform, $state, $ionicHistory, $ionicPopup) {
+.run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -58,22 +58,22 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
       }
     })
 
-  // Nav stack for create tab
-  .state('tab.chats', {
-      url: '/chats',
+  // Nav stack for Search tab
+  .state('tab.search', {
+      url: '/search',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/tab-chats.html',
-          controller: 'ChatsCtrl'
+        'tab-search': {
+          templateUrl: 'templates/tab-search.html',
+          controller: 'SearchCtrl'
         }
       }
     })
-    .state('tab.chat-detail', {
-      url: '/chats/:chatId',
+    .state('tab.artist-detail', {
+      url: 'search/:artistid/:artistName/:userid',
       views: {
-        'tab-chats': {
-          templateUrl: 'templates/chat-detail.html',
-          controller: 'ChatDetailCtrl'
+        'tab-search': {
+          templateUrl: 'templates/artist-detail.html',
+          controller: 'ArtistDetailCtrl',
         }
       }
     })

@@ -1,50 +1,80 @@
 angular.module('services', [])
 
-.factory('Chats', function() {
-  console.log('chats factory instantiated')
+.factory('Auth', function($cordovaOauth, Spotify) {
+  const CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
+  const SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
-  // Some fake testing data
-  var chats = [{
-    id: 0,
-    name: 'Ben Sparrow',
-    lastText: 'You on your way?',
-    face: 'img/ben.png'
-  }, {
-    id: 1,
-    name: 'Max Lynx',
-    lastText: 'Hey, it\'s me',
-    face: 'img/max.png'
-  }, {
-    id: 2,
-    name: 'Adam Bradleyson',
-    lastText: 'I should buy a boat',
-    face: 'img/adam.jpg'
-  }, {
-    id: 3,
-    name: 'Perry Governor',
-    lastText: 'Look at my mukluks!',
-    face: 'img/perry.png'
-  }, {
-    id: 4,
-    name: 'Mike Harrington',
-    lastText: 'This is wicked good ice cream.',
-    face: 'img/mike.png'
-  }];
+  //Private
+  /**
+   * Utility function valled by verifyToken
+   * @return {promise} - Returns promise that resolves after user logs in
+   */
+  function performLogin() {
+    return $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
+      window.localStorage.setItem('spotify-token', result.access_token)
+      Spotify.setAuthToken(result.access_token)
+    }, function(error) {
+      console.dir(error)
+    })
+  }
+
+  //Public
+  /**
+   * Returns id of current user
+   * @return {string} - user id of current user
+   */
+  function getCurrentUser() {
+    return Spotify.getCurrentUser().then(user => { return user.id })
+  }
+
+  /**
+   * Performed upon entry to every view in app
+   * Does these things:
+   *   -Checks for stored auth token
+   *   -Sets auth token if stored token found
+   *   -If not found, prompts user for login then sets auth token
+   * @return {Promise} - Returns promise either after token is found, or after login succeeded
+   */
+  function verify() {
+    let storedToken = window.localStorage.getItem('spotify-token')
+    console.log('checking for Auth')
+    if(storedToken) {
+      Spotify.setAuthToken(storedToken)
+      return Promise.resolve()
+    } else {
+      return performLogin()
+    }
+  }
 
   return {
-    all: function() {
-      return chats;
+    getCurrentUser,
+    verify
+  }
+})
+
+.factory('Playlists', function(Spotify, Auth) {
+  return {
+    /**
+     * Fetches current user's id, then returns array of playlists
+     * @return {array} - array of playlist objects
+     */
+    get: function() {
+      return Auth.getCurrentUser().then(userid => {
+        return Spotify.getUserPlaylists(userid).then(data => data.items)
+      })
     },
-    remove: function(chat) {
-      chats.splice(chats.indexOf(chat), 1);
-    },
-    get: function(chatId) {
-      for (var i = 0; i < chats.length; i++) {
-        if (chats[i].id === parseInt(chatId)) {
-          return chats[i];
-        }
-      }
-      return null;
+    /**
+     * Fetches current user's id, then playlists, then returns array of playlist ids
+     * @return {array} - array of playlist ids
+     */
+    getIds: function() {
+      return Auth.getCurrentUser().then(userid => {
+        return Spotify.getUserPlaylists(userid).then(data => {
+          let ids = []
+          data.items.forEach(item => ids.push(item.id))
+          return ids
+        })
+      })
     }
-  };
-});
+  }
+})

@@ -1,48 +1,16 @@
 angular.module('PlaylistsCtrl', [])
 
-.controller('PlaylistsCtrl', function($scope, $ionicPlatform, $cordovaOauth, Spotify) {
+.controller('PlaylistsCtrl', function($scope, $ionicPlatform, $cordovaOauth, Spotify, Auth, Playlists) {
   console.log('playlist control instantiated')
-
-  let CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
-  let SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
   $scope.playlists = []
 
-  $ionicPlatform.ready(function() {
-    let storedToken = window.localStorage.getItem('spotify-token')
-    // let storedToken = null
-    console.log('checking for stored token')
-    if(storedToken) {
-      Spotify.setAuthToken(storedToken)
-      $scope.updateInfo()
-      console.log('Stored token found')
-    } else {
-      $scope.performLogin()
-    }
+  // Checks for auth on entering this view
+  // After that, loads in playlists for that user
+  $scope.$on("$ionicView.enter", function() {
+    Auth.verify().then(() => {
+      console.log('auth has done been checked in the playlist ctrl')
+      Playlists.get().then(playlists => {$scope.playlists = playlists})
+    })
   })
-
-  $scope.performLogin = function() {
-    $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
-      console.log("login successful")
-      window.localStorage.setItem('spotify-token', result.access_token)
-      Spotify.setAuthToken(result.access_token)
-      $scope.updateInfo()
-    }, function(error) {
-      console.log('Error -> ' + error)
-    })
-  }
-
-  $scope.updateInfo = function() {
-    Spotify.getCurrentUser().then(function (data) {
-      $scope.getUserPlaylists(data.id)
-    }, function(error) {
-      $scope.performLogin()
-    })
-  }
-
-  $scope.getUserPlaylists = function(userid) {
-    Spotify.getUserPlaylists(userid).then(function (data) {
-      $scope.playlists = data.items;
-    })
-  }
 })

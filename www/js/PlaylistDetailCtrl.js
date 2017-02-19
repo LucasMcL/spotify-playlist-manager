@@ -30,15 +30,21 @@ angular.module('PlaylistDetailCtrl', [])
   }
 
   /**
-   * toggle edit mode variable
-   * reset ordering variables
+   * Utility functions for entering / exiting edit mode
    */
-  function toggleEditMode() {
-    $scope.editMode = !$scope.editMode
-
-    // Reset these values when entering/exiting edit mode
+  function resetSortOptions() {
     $scope.orderCriteria = 'none'
     $scope.descending = false
+  }
+
+  function enterEditMode() {
+    resetSortOptions()
+    $scope.editMode = true
+  }
+
+  function exitEditMode() {
+    resetSortOptions()
+    $scope.editMode = false
   }
 
   /**
@@ -48,11 +54,9 @@ angular.module('PlaylistDetailCtrl', [])
   function showPlaylistSavedToast() {
     $cordovaToast.showWithOptions({
       message: "Playlist saved",
-      duration: "short", // which is 2000 ms. "long" is 4000. Or specify the nr of ms yourself.
+      duration: "short",
       position: "bottom",
-      addPixelsY: -175  // added a negative value to move it up a bit (default 0)
-    }).then(success => {
-      console.log(success)
+      addPixelsY: -175  // move up above tabs
     }).catch(error => {
       console.log(error)
     })
@@ -65,10 +69,11 @@ angular.module('PlaylistDetailCtrl', [])
    */
   $scope.onEditButtonTap = function() {
     console.log('edit button tap')
+    // If leaving edit mode...
     if($scope.editMode) {
       $scope.saveChanges()
     } else {
-      toggleEditMode()
+      enterEditMode()
     }
   }
 
@@ -122,7 +127,7 @@ angular.module('PlaylistDetailCtrl', [])
   $scope.saveChanges = function() {
     if($scope.changesMade === false) {
       console.log('no changes made')
-      toggleEditMode()
+      exitEditMode()
     } else {
       console.log('save changes')
       let uris = []
@@ -131,7 +136,7 @@ angular.module('PlaylistDetailCtrl', [])
         .replacePlaylistTracks(userid, listid, uris)
         .then(data => {
           $scope.changesMade = false // reset after save
-          toggleEditMode()
+          exitEditMode()
           showPlaylistSavedToast()
         })
         .catch(error => {
@@ -149,7 +154,7 @@ angular.module('PlaylistDetailCtrl', [])
     console.log('cancel changes')
 
     getTracks()
-    toggleEditMode()
+    exitEditMode()
   }
 
   /**
@@ -200,6 +205,21 @@ angular.module('PlaylistDetailCtrl', [])
   // Save changes on exit app or view change
   $scope.$on("$ionicView.leave", $scope.saveChanges);
   $ionicPlatform.on('pause', $scope.saveChanges);
+
+  let myArray = ['apples', 'bananas', 'blueberries', 'crumpets']
+
+  let i = 0
+  console.log(i)
+  $scope.addSongs = function() {
+    if (i >= 3) return
+    console.log(i)
+    Spotify
+      .addPlaylistTracks(userid, listid, 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh')
+      .then(() => {
+        i++
+        $scope.addSongs()
+      })
+  }
 })
 
 

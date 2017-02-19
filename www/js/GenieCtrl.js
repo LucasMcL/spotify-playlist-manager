@@ -1,33 +1,16 @@
 angular.module('GenieCtrl', [])
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
-
-  console.log('chats ctrl instantiated')
-
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
-
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  console.log('chats detail ctrl instantiated')
-
-  $scope.chat = Chats.get($stateParams.chatId);
-})
-
-.controller('AccountCtrl', function($scope, $cordovaOauth, Spotify) {
+.controller('AccountCtrl', function($scope, $cordovaOauth, Spotify, Auth) {
   console.log('accounts ctrl instantiated')
 
-  $scope.settings = {
-    enableFriends: true
-  };
+  $scope.$on("$ionicView.enter", function() {
+    Auth.verify().then(() => {
+      console.log('auth has done been checked in the account ctrl')
+    })
+  })
 
+  $scope.clearCookies = function() {
+  	console.log('clearing cookies')
+  	localStorage.removeItem("spotify-token");
+  }
 })
