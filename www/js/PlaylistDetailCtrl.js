@@ -162,13 +162,20 @@ angular.module('PlaylistDetailCtrl', [])
     }
   }
 
+
+  /**
+   * loops through array of edits and makes the requests Spotify, one after the other
+   * Recursive, function called again after http request is successful
+   */
   let editCounter = 0
   function commitChange() {
+    // Exit recursive loop if you've reached (or accidentally exceeded) the array length
     if(editCounter >= editLog.length) {
       editCounter = 0
       editLog = []
       return
     }
+    // Make http call for deleting track, then loop back
     if(editLog[editCounter].type === "delete") {
       Spotify
         .removePlaylistTracks(userid, listid, editLog[editCounter].uri)
@@ -177,6 +184,7 @@ angular.module('PlaylistDetailCtrl', [])
           editCounter++
           commitChange()
         })
+    // Make http call for moving track, then loop back
     } else if(editLog[editCounter].type === "move") {
       Spotify.reorderPlaylistTracks(userid, listid, {
         range_start: editLog[editCounter].fromIndex,
