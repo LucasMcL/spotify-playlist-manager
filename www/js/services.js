@@ -75,6 +75,27 @@ angular.module('services', [])
           return ids
         })
       })
-    }
+    },
+    commitChanges: commitChanges
   }
+
+  /**
+   * Takes locally saved track list and makes necessary reorder and delete requests to spotify
+   * to update playlist
+   * @param  {array} oldList - current state of playlist on Spotify before commiting changes
+   * @param  {array} newList - locally saved array of track objects
+   */
+  function commitChanges(oldList, newList, userid, listid) {
+    let oldUris = []
+    let newUris = []
+    oldList.forEach(item => oldUris.push(item.track.uri))
+    newList.forEach(item => newUris.push(item.track.uri))
+
+    let deleted = oldUris.filter(x => newUris.indexOf(x) == -1);
+    console.dir(deleted)
+    Spotify
+      .removePlaylistTracks(userid, listid, deleted)
+      .then(() => console.log('tracks deleted'))
+  }
+
 })

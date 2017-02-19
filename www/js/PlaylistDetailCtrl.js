@@ -1,6 +1,6 @@
 angular.module('PlaylistDetailCtrl', [])
 
-.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $cordovaToast) {
+.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $cordovaToast, Playlists) {
   console.log('playlist detail control instantiated')
 
   // Grab variables from route paramaters
@@ -40,6 +40,7 @@ angular.module('PlaylistDetailCtrl', [])
 
   function enterEditMode() {
     resetSortOptions()
+
     $scope.editMode = true
   }
 
@@ -147,23 +148,16 @@ angular.module('PlaylistDetailCtrl', [])
       exitEditMode()
     } else {
       console.log('save changes')
-      commitChange()
-      // let uris = []
-      // $scope.tracks.forEach(item => uris.push(item.track.uri))
-      // Spotify
-      //   .replacePlaylistTracks(userid, listid, uris)
-      //   .then(data => {
-      //     $scope.changesMade = false // reset after save
-          // exitEditMode()
-          // showPlaylistSavedToast()
-      //   })
-      //   .catch(error => {
-      //     alert('There was an error saving changes.  Please try again.')
-      //     console.dir(error)
-      //   })
+      // commitChange()
+      // Get playlist songs, pass that info and locally saved playlist to commitChanges
+      Spotify.getPlaylist(userid, listid)
+        .then(data => {
+          Playlists.commitChanges(data.tracks.items, $scope.tracks, userid, listid)
+        }).catch(error => {
+          console.dir(error)
+        })
     }
   }
-
 
   /**
    * loops through array of edits and makes the requests Spotify, one after the other
