@@ -106,19 +106,21 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
       return newUris.indexOf(x) >= 0;
     });
 
-    console.dir(newUris);
-    console.dir(remaining);
+    console.log('newUris: ');console.dir(newUris);
+    console.log('remaining: ');console.dir(remaining);
     Spotify.removePlaylistTracks(userid, listid, deleted).then(function () {
       return reorderTracks();
     });
 
     var i = 0;
+    var range_start = void 0;
+    var insert_before = void 0;
     function reorderTracks() {
       if (i > newUris.length - 1) {
         i = 0;
         return;
       }
-      range_start = remaining.indexOf(newUris[i]);
+      range_start = remaining.indexOf(newUris[i]);console.log(range_start);
       insert_before = i;
       console.log(i + ': moving track from ' + range_start + ' to before ' + insert_before);
 

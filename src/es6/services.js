@@ -94,19 +94,21 @@ angular.module('services', [])
     let deleted = oldUris.filter(x => newUris.indexOf(x) == -1)
     let remaining = oldUris.filter(x => newUris.indexOf(x) >= 0)
 
-    console.dir(newUris)
-    console.dir(remaining)
+    console.log('newUris: '); console.dir(newUris)
+    console.log('remaining: '); console.dir(remaining)
     Spotify
       .removePlaylistTracks(userid, listid, deleted)
       .then(() => reorderTracks())
 
     let i = 0
+    let range_start
+    let insert_before
     function reorderTracks() {
       if(i > newUris.length - 1) {
         i = 0
         return
       }
-      range_start = remaining.indexOf(newUris[i])
+      range_start = remaining.indexOf(newUris[i]); console.log(range_start)
       insert_before = i
       console.log(`${i}: moving track from ${range_start} to before ${insert_before}`)
 
