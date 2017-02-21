@@ -1,21 +1,24 @@
-'use strict';
-
 // Initialize app
 // Inject dependencies
-angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify']).run(function ($ionicPlatform) {
-  $ionicPlatform.ready(function () {
+angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
+
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
+
     }
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
   });
-}).config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+})
+
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 
   // Ionic uses AngularUI Router which uses the concept of states
   // Learn more here: https://github.com/angular-ui/ui-router
@@ -27,7 +30,7 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
   $stateProvider
 
   // setup an abstract state for the tabs directive
-  .state('tab', {
+    .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html'
@@ -44,34 +47,36 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
         controller: 'PlaylistsCtrl'
       }
     }
-  }).state('tab.playlists-detail', {
-    url: 'playlists/:listid/:userid/:listTitle',
-    views: {
-      'tab-playlists': {
-        templateUrl: 'templates/playlist-detail.html',
-        controller: 'PlaylistDetailCtrl'
-      }
-    }
   })
+    .state('tab.playlists-detail', {
+      url: 'playlists/:listid/:userid/:listTitle',
+      views: {
+        'tab-playlists': {
+          templateUrl: 'templates/playlist-detail.html',
+          controller: 'PlaylistDetailCtrl',
+        }
+      }
+    })
 
   // Nav stack for Search tab
   .state('tab.search', {
-    url: '/search',
-    views: {
-      'tab-search': {
-        templateUrl: 'templates/tab-search.html',
-        controller: 'SearchCtrl'
+      url: '/search',
+      views: {
+        'tab-search': {
+          templateUrl: 'templates/tab-search.html',
+          controller: 'SearchCtrl'
+        }
       }
-    }
-  }).state('tab.artist-detail', {
-    url: 'search/:artistid/:artistName/:userid',
-    views: {
-      'tab-search': {
-        templateUrl: 'templates/artist-detail.html',
-        controller: 'ArtistDetailCtrl'
+    })
+    .state('tab.artist-detail', {
+      url: 'search/:artistid/:artistName/:userid',
+      views: {
+        'tab-search': {
+          templateUrl: 'templates/artist-detail.html',
+          controller: 'ArtistDetailCtrl',
+        }
       }
-    }
-  })
+    })
 
   // Nav stack for account tab
   .state('tab.account', {
@@ -84,6 +89,7 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
     }
   });
 
+
   // Configure layout for Android and iPhone
-  $ionicConfigProvider.tabs.position('bottom');
+  $ionicConfigProvider.tabs.position('bottom')
 });

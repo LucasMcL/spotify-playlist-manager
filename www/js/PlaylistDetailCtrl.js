@@ -1,50 +1,54 @@
-angular.module('PlaylistDetailCtrl', [])
+'use strict';
 
-.controller('PlaylistDetailCtrl', function($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $cordovaToast) {
-  console.log('playlist detail control instantiated')
+angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', function ($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $cordovaToast, Playlists) {
+  console.log('playlist detail control instantiated');
 
   // Grab variables from route paramaters
   // This is how I pass the information from PlaylistCtrl
-  let listid = $stateParams.listid
-  let userid = $stateParams.userid
-  $scope.playlistTitle = $stateParams.listTitle
+  var listid = $stateParams.listid;
+  var userid = $stateParams.userid;
+  $scope.playlistTitle = $stateParams.listTitle;
 
-  $scope.editMode = false // toggled on and off
-  $scope.changesMade = false // turned to true when first edit made
-  $scope.orderCriteria = "none"
-  $scope.descending = false
+  $scope.editMode = false; // toggled on and off
+  $scope.changesMade = false; // turned to true when first edit made
+  $scope.orderCriteria = "none";
+  $scope.descending = false;
+  var editLog = [];
 
-  $scope.tracks = []
-  getTracks() // load tracks immediately
+  $scope.tracks = [];
+  getTracks(); // load tracks immediately
 
   /**
    * Get tracks for playlist using playlist id and user id
    */
   function getTracks() {
-    Spotify.getPlaylist(userid, listid)
-      .then(data => {
-        $scope.tracks = data.tracks.items
-      }).catch(error => {
-        console.dir(error)
-      })
+    Spotify.getPlaylist(userid, listid).then(function (data) {
+      $scope.tracks = data.tracks.items;
+    }).catch(function (error) {
+      console.dir(error);
+    });
   }
 
   /**
    * Utility functions for entering / exiting edit mode
    */
   function resetSortOptions() {
-    $scope.orderCriteria = 'none'
-    $scope.descending = false
+    $scope.orderCriteria = 'none';
+    $scope.descending = false;
   }
 
   function enterEditMode() {
-    resetSortOptions()
-    $scope.editMode = true
+    resetSortOptions();
+
+    $scope.editMode = true;
   }
 
   function exitEditMode() {
-    resetSortOptions()
-    $scope.editMode = false
+    console.log('exiting edit mode');
+    resetSortOptions();
+
+    $scope.editMode = false;
+    $scope.changesMade = false;
   }
 
   /**
@@ -56,10 +60,10 @@ angular.module('PlaylistDetailCtrl', [])
       message: "Playlist saved",
       duration: "short",
       position: "bottom",
-      addPixelsY: -175  // move up above tabs
-    }).catch(error => {
-      console.log(error)
-    })
+      addPixelsY: -175 // move up above tabs
+    }).catch(function (error) {
+      console.log(error);
+    });
   }
 
   /**
@@ -67,15 +71,15 @@ angular.module('PlaylistDetailCtrl', [])
    * Calls saveChanges if attmpting to exiting edit mode
    * Toggles edit mode ON if not in edit mode
    */
-  $scope.onEditButtonTap = function() {
-    console.log('edit button tap')
+  $scope.onEditButtonTap = function () {
+    console.log('edit button tap');
     // If leaving edit mode...
-    if($scope.editMode) {
-      $scope.saveChanges()
+    if ($scope.editMode) {
+      $scope.saveChanges();
     } else {
-      enterEditMode()
+      enterEditMode();
     }
-  }
+  };
 
   /**
    * Called when item is reordered on DOM
@@ -83,121 +87,131 @@ angular.module('PlaylistDetailCtrl', [])
    * @param  {integer} fromIndex - index where the object was in $scope.tracks
    * @param  {integer} toIndex - index where the object was moved to in $scope.tracks
    */
-  $scope.onItemMove = function(item, fromIndex, toIndex) {
-    $scope.tracks.splice(fromIndex, 1)
-    $scope.tracks.splice(toIndex, 0, item)
-    $scope.$apply()
+  $scope.onItemMove = function (item, fromIndex, toIndex) {
+    $scope.tracks.splice(fromIndex, 1);
+    $scope.tracks.splice(toIndex, 0, item);
+    $scope.$apply();
 
-    $scope.changesMade = true
-  }
+    if (toIndex > fromIndex) toIndex++;
+
+    editLog.push({
+      type: 'move',
+      uri: item.track.uri,
+      fromIndex: fromIndex,
+      toIndex: toIndex
+    });
+
+    $scope.changesMade = true;
+  };
 
   /**
    * Called when item deleted in DOM
    * @param  {obj} item - object containing track info and metadata
    */
-  $scope.onItemDelete = function(item) {
-    $scope.tracks.splice($scope.tracks.indexOf(item), 1)
+  $scope.onItemDelete = function (item) {
+    $scope.tracks.splice($scope.tracks.indexOf(item), 1);
 
-    $scope.changesMade = true
-  }
+    editLog.push({
+      type: 'delete',
+      uri: item.track.uri
+    });
 
-   /**
-   * Sorts $scope.tracks on different criteria
-   * @param  {string} orderCriteria - value of select option
-   */
-  $scope.onSelectChange = function(orderCriteria) {
-    $scope.orderCriteria = orderCriteria
-    $scope.changesMade = true
-    orderSongs()
-  }
+    $scope.changesMade = true;
+  };
+
+  /**
+  * Sorts $scope.tracks on different criteria
+  * @param  {string} orderCriteria - value of select option
+  */
+  $scope.onSelectChange = function (orderCriteria) {
+    $scope.orderCriteria = orderCriteria;
+    $scope.changesMade = true;
+    orderSongs();
+  };
 
   /**
    * Run when user selects toggles the "descending" option
    * @param  {boolean} descending - state of the "descending" toggle
    */
-  $scope.onDescendToggle = function(descending) {
-    $scope.descending = descending
-    $scope.changesMade = true
-    orderSongs()
-  }
+  $scope.onDescendToggle = function (descending) {
+    $scope.descending = descending;
+    $scope.changesMade = true;
+    orderSongs();
+  };
 
   /**
    * attempts post of new playlist state to Spotify if changes were made
    */
-  $scope.saveChanges = function() {
-    if($scope.changesMade === false) {
-      console.log('no changes made')
-      exitEditMode()
+  $scope.saveChanges = function () {
+    if ($scope.changesMade === false) {
+      console.log('no changes made');
+      exitEditMode();
     } else {
-      console.log('save changes')
-      let uris = []
-      $scope.tracks.forEach(item => uris.push(item.track.uri))
-      Spotify
-        .replacePlaylistTracks(userid, listid, uris)
-        .then(data => {
-          $scope.changesMade = false // reset after save
-          exitEditMode()
-          showPlaylistSavedToast()
-        })
-        .catch(error => {
-          alert('There was an error saving changes.  Please try again.')
-          console.dir(error)
-        })
+      console.log('save changes');
+      // Get playlist songs, pass that info and locally saved playlist to commitChanges
+      Spotify.getPlaylist(userid, listid).then(function (data) {
+        Playlists.commitChanges(data.tracks.items, $scope.tracks, userid, listid).then(function () {
+          showPlaylistSavedToast();
+          exitEditMode();
+          $scope.$apply();
+        });
+      }).catch(function (error) {
+        console.dir(error);
+      });
     }
-  }
+  };
 
   /**
    * Code run when user selects "discard changes"
    * Gets current tracklist from Spotify and updates DOM
    */
-  $scope.cancelChanges = function() {
-    console.log('cancel changes')
+  $scope.cancelChanges = function () {
+    console.log('cancel changes');
 
-    getTracks()
-    exitEditMode()
-  }
+    getTracks();
+    exitEditMode();
+  };
 
   /**
    * Called whenever "order by" is changed or "descnding" is changed
    * Sorts based on order criteria and whether user wants them to descend or not
    */
   function orderSongs() {
-    console.log("$scope.orderCriteria", $scope.orderCriteria)
-    console.log("$scope.descending", $scope.descending)
+    console.log("$scope.orderCriteria", $scope.orderCriteria);
+    console.log("$scope.descending", $scope.descending);
 
-    let returnVal
-    if($scope.descending === false) returnVal = -1
-    else returnVal = 1
+    var returnVal = void 0;
+    if ($scope.descending === false) returnVal = -1;else returnVal = 1;
 
-    switch($scope.orderCriteria) {
+    switch ($scope.orderCriteria) {
       case 'song':
-        $scope.tracks.sort((a, b) => {
+        $scope.tracks.sort(function (a, b) {
           if (a.track.name < b.track.name) return returnVal;
           if (a.track.name > b.track.name) return -returnVal;
           return 0;
-        })
-        break
+        });
+        break;
       case 'artist':
-        $scope.tracks.sort((a, b) => {
+        $scope.tracks.sort(function (a, b) {
           if (a.track.artists[0].name < b.track.artists[0].name) return returnVal;
           if (a.track.artists[0].name > b.track.artists[0].name) return -returnVal;
           return 0;
-        })
-        break
+        });
+        break;
       case 'album':
-        $scope.tracks.sort((a, b) => {
+        $scope.tracks.sort(function (a, b) {
           if (a.track.album.name < b.track.album.name) return returnVal;
           if (a.track.album.name > b.track.album.name) return -returnVal;
           return 0;
-        })
-        break
+        });
+        break;
       case 'length':
-        $scope.tracks.sort((a, b) => {
+        $scope.tracks.sort(function (a, b) {
           if (a.track.duration_ms < b.track.duration_ms) return returnVal;
           if (a.track.duration_ms > b.track.duration_ms) return -returnVal;
           return 0;
-        })
-        break
+        });
+        break;
     }
   } // end orderSongs()
 
@@ -205,22 +219,4 @@ angular.module('PlaylistDetailCtrl', [])
   // Save changes on exit app or view change
   $scope.$on("$ionicView.leave", $scope.saveChanges);
   $ionicPlatform.on('pause', $scope.saveChanges);
-
-  let myArray = ['apples', 'bananas', 'blueberries', 'crumpets']
-
-  let i = 0
-  console.log(i)
-  $scope.addSongs = function() {
-    if (i >= 3) return
-    console.log(i)
-    Spotify
-      .addPlaylistTracks(userid, listid, 'spotify:track:4iV5W9uYEdYUVa79Axb7Rh')
-      .then(() => {
-        i++
-        $scope.addSongs()
-      })
-  }
-})
-
-
-
+});

@@ -1,16 +1,18 @@
-angular.module('PlaylistsCtrl', [])
+'use strict';
 
-.controller('PlaylistsCtrl', function($scope, $ionicPlatform, $cordovaOauth, Spotify, Auth, Playlists) {
-  console.log('playlist control instantiated')
+angular.module('PlaylistsCtrl', []).controller('PlaylistsCtrl', function ($scope, $ionicPlatform, $cordovaOauth, Spotify, Auth, Playlists) {
+  console.log('playlist control instantiated');
 
-  $scope.playlists = []
+  $scope.playlists = [];
 
   // Checks for auth on entering this view
   // After that, loads in playlists for that user
-  $scope.$on("$ionicView.enter", function() {
-    Auth.verify().then(() => {
-      console.log('auth has done been checked in the playlist ctrl')
-      Playlists.get().then(playlists => {$scope.playlists = playlists})
-    })
-  })
-})
+  $scope.$on("$ionicView.enter", function () {
+    Auth.verify().then(function () {
+      console.log('auth has done been checked in the playlist ctrl');
+      Playlists.get().then(function (playlists) {
+        $scope.playlists = playlists;
+      });
+    });
+  });
+});
