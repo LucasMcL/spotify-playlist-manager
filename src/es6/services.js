@@ -95,30 +95,36 @@ angular.module('services', [])
     let deleted = oldUris.filter(x => newUris.indexOf(x) == -1)
     let remaining = oldUris.filter(x => newUris.indexOf(x) >= 0)
 
-    Spotify
-      .removePlaylistTracks(userid, listid, deleted)
-      .then(() => reorderTracks())
-
     let i = 0
     let range_start
     let insert_before
-    function reorderTracks() {
-      if(i > newUris.length - 1) {
-        i = 0
-        return
-      }
-      range_start = remaining.indexOf(newUris[i]); console.log(range_start)
-      insert_before = i
-      console.log(`${i}: moving track from ${range_start} to before ${insert_before}`)
 
+    return new Promise((resolve, reject) => {
       Spotify
-        .reorderPlaylistTracks(userid, listid, {range_start, insert_before})
-        .then(() => {
-          i++
-          updateRemaining()
-          reorderTracks()
-        })
-    }
+        .removePlaylistTracks(userid, listid, deleted)
+        .then(() => reorderTracks())
+
+      function reorderTracks() {
+        if(i > newUris.length - 1) {
+          i = 0
+          resolve()
+          return
+        }
+        range_start = remaining.indexOf(newUris[i]); console.log(range_start)
+        insert_before = i
+        console.log(`${i}: moving track from ${range_start} to before ${insert_before}`)
+
+        Spotify
+          .reorderPlaylistTracks(userid, listid, {range_start, insert_before})
+          .then(() => {
+            i++
+            updateRemaining()
+            reorderTracks()
+          })
+      }
+
+    })
+
 
     /**
      * Utility function to update the local array to new state after a

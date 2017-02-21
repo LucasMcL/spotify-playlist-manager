@@ -107,28 +107,32 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
       return newUris.indexOf(x) >= 0;
     });
 
-    Spotify.removePlaylistTracks(userid, listid, deleted).then(function () {
-      return reorderTracks();
-    });
-
     var i = 0;
     var range_start = void 0;
     var insert_before = void 0;
-    function reorderTracks() {
-      if (i > newUris.length - 1) {
-        i = 0;
-        return;
-      }
-      range_start = remaining.indexOf(newUris[i]);console.log(range_start);
-      insert_before = i;
-      console.log(i + ': moving track from ' + range_start + ' to before ' + insert_before);
 
-      Spotify.reorderPlaylistTracks(userid, listid, { range_start: range_start, insert_before: insert_before }).then(function () {
-        i++;
-        updateRemaining();
-        reorderTracks();
+    return new Promise(function (resolve, reject) {
+      Spotify.removePlaylistTracks(userid, listid, deleted).then(function () {
+        return reorderTracks();
       });
-    }
+
+      function reorderTracks() {
+        if (i > newUris.length - 1) {
+          i = 0;
+          resolve();
+          return;
+        }
+        range_start = remaining.indexOf(newUris[i]);console.log(range_start);
+        insert_before = i;
+        console.log(i + ': moving track from ' + range_start + ' to before ' + insert_before);
+
+        Spotify.reorderPlaylistTracks(userid, listid, { range_start: range_start, insert_before: insert_before }).then(function () {
+          i++;
+          updateRemaining();
+          reorderTracks();
+        });
+      }
+    });
 
     /**
      * Utility function to update the local array to new state after a
