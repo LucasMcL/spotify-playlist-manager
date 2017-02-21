@@ -90,6 +90,7 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
    * @param  {array} newList - locally saved array of track objects
    */
   function commitChanges(oldList, newList, userid, listid) {
+    console.log('commitChanges function called');
     var oldUris = [];
     var newUris = [];
     oldList.forEach(function (item) {
@@ -106,8 +107,6 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
       return newUris.indexOf(x) >= 0;
     });
 
-    console.log('newUris: ');console.dir(newUris);
-    console.log('remaining: ');console.dir(remaining);
     Spotify.removePlaylistTracks(userid, listid, deleted).then(function () {
       return reorderTracks();
     });
@@ -131,6 +130,10 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
       });
     }
 
+    /**
+     * Utility function to update the local array to new state after a
+     * single reorder has been completed
+     */
     function updateRemaining() {
       var uri = remaining[range_start];
       remaining.splice(range_start, 1);

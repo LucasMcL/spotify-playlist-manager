@@ -86,6 +86,7 @@ angular.module('services', [])
    * @param  {array} newList - locally saved array of track objects
    */
   function commitChanges(oldList, newList, userid, listid) {
+    console.log('commitChanges function called')
     let oldUris = []
     let newUris = []
     oldList.forEach(item => oldUris.push(item.track.uri))
@@ -94,8 +95,6 @@ angular.module('services', [])
     let deleted = oldUris.filter(x => newUris.indexOf(x) == -1)
     let remaining = oldUris.filter(x => newUris.indexOf(x) >= 0)
 
-    console.log('newUris: '); console.dir(newUris)
-    console.log('remaining: '); console.dir(remaining)
     Spotify
       .removePlaylistTracks(userid, listid, deleted)
       .then(() => reorderTracks())
@@ -121,6 +120,10 @@ angular.module('services', [])
         })
     }
 
+    /**
+     * Utility function to update the local array to new state after a
+     * single reorder has been completed
+     */
     function updateRemaining() {
       let uri = remaining[range_start]
       remaining.splice(range_start, 1)

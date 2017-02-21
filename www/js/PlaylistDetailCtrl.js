@@ -147,49 +147,16 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
       exitEditMode();
     } else {
       console.log('save changes');
-      // commitChange()
       // Get playlist songs, pass that info and locally saved playlist to commitChanges
       Spotify.getPlaylist(userid, listid).then(function (data) {
-        Playlists.commitChanges(data.tracks.items, $scope.tracks, userid, listid);
+        Playlists.commitChanges(data.tracks.items, $scope.tracks, userid, listid).then(function () {
+          return console.log('Changes committed');
+        });
       }).catch(function (error) {
         console.dir(error);
       });
     }
   };
-
-  /**
-   * loops through array of edits and makes the requests Spotify, one after the other
-   * Recursive, function called again after http request is successful
-   */
-  var editCounter = 0;
-  function commitChange() {
-    // Exit recursive loop if you've reached (or accidentally exceeded) the array length
-    if (editCounter >= editLog.length) {
-      exitEditMode();
-      showPlaylistSavedToast();
-      editCounter = 0;
-      editLog = [];
-      return;
-    }
-    // Make http call for deleting track, then loop back
-    if (editLog[editCounter].type === "delete") {
-      Spotify.removePlaylistTracks(userid, listid, editLog[editCounter].uri).then(function () {
-        console.log(editCounter + ': delete sent');
-        editCounter++;
-        commitChange();
-      });
-      // Make http call for moving track, then loop back
-    } else if (editLog[editCounter].type === "move") {
-      Spotify.reorderPlaylistTracks(userid, listid, {
-        range_start: editLog[editCounter].fromIndex,
-        insert_before: editLog[editCounter].toIndex
-      }).then(function () {
-        console.log(editCounter + ': move sent');
-        editCounter++;
-        commitChange();
-      });
-    }
-  }
 
   /**
    * Code run when user selects "discard changes"
