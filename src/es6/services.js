@@ -53,30 +53,28 @@ angular.module('services', [])
 })
 
 .factory('Playlists', function(Spotify, Auth) {
-  return {
-    /**
-     * Fetches current user's id, then returns array of playlists
-     * @return {array} - array of playlist objects
-     */
-    get: function() {
-      return Auth.getCurrentUser().then(userid => {
-        return Spotify.getUserPlaylists(userid).then(data => data.items)
+  /**
+   * Fetches current user's id, then returns array of playlists
+   * @return {array} - array of playlist objects
+   */
+  function get() {
+    return Auth.getCurrentUser().then(userid => {
+      return Spotify.getUserPlaylists(userid).then(data => data.items)
+    })
+  }
+
+  /**
+   * Fetches current user's id, then playlists, then returns array of playlist ids
+   * @return {array} - array of playlist ids
+   */
+  function getIds() {
+    return Auth.getCurrentUser().then(userid => {
+      return Spotify.getUserPlaylists(userid).then(data => {
+        let ids = []
+        data.items.forEach(item => ids.push(item.id))
+        return ids
       })
-    },
-    /**
-     * Fetches current user's id, then playlists, then returns array of playlist ids
-     * @return {array} - array of playlist ids
-     */
-    getIds: function() {
-      return Auth.getCurrentUser().then(userid => {
-        return Spotify.getUserPlaylists(userid).then(data => {
-          let ids = []
-          data.items.forEach(item => ids.push(item.id))
-          return ids
-        })
-      })
-    },
-    commitChanges: commitChanges
+    })
   }
 
   /**
@@ -123,9 +121,7 @@ angular.module('services', [])
             reorderTracks()
           })
       }
-
     })
-
 
     /**
      * Utility function to update the local array to new state after a
@@ -136,6 +132,12 @@ angular.module('services', [])
       remaining.splice(range_start, 1)
       remaining.splice(insert_before, 0, uri)
     }
+  }
+
+  return {
+    get,
+    getIds,
+    commitChanges
   }
 })
 

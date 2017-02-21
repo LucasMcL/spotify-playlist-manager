@@ -53,35 +53,33 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
     verify: verify
   };
 }).factory('Playlists', function (Spotify, Auth) {
-  return {
-    /**
-     * Fetches current user's id, then returns array of playlists
-     * @return {array} - array of playlist objects
-     */
-    get: function get() {
-      return Auth.getCurrentUser().then(function (userid) {
-        return Spotify.getUserPlaylists(userid).then(function (data) {
-          return data.items;
-        });
+  /**
+   * Fetches current user's id, then returns array of playlists
+   * @return {array} - array of playlist objects
+   */
+  function get() {
+    return Auth.getCurrentUser().then(function (userid) {
+      return Spotify.getUserPlaylists(userid).then(function (data) {
+        return data.items;
       });
-    },
-    /**
-     * Fetches current user's id, then playlists, then returns array of playlist ids
-     * @return {array} - array of playlist ids
-     */
-    getIds: function getIds() {
-      return Auth.getCurrentUser().then(function (userid) {
-        return Spotify.getUserPlaylists(userid).then(function (data) {
-          var ids = [];
-          data.items.forEach(function (item) {
-            return ids.push(item.id);
-          });
-          return ids;
+    });
+  }
+
+  /**
+   * Fetches current user's id, then playlists, then returns array of playlist ids
+   * @return {array} - array of playlist ids
+   */
+  function getIds() {
+    return Auth.getCurrentUser().then(function (userid) {
+      return Spotify.getUserPlaylists(userid).then(function (data) {
+        var ids = [];
+        data.items.forEach(function (item) {
+          return ids.push(item.id);
         });
+        return ids;
       });
-    },
-    commitChanges: commitChanges
-  };
+    });
+  }
 
   /**
    * Takes locally saved track list and makes necessary reorder and delete requests to spotify
@@ -145,4 +143,10 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
       remaining.splice(insert_before, 0, uri);
     }
   }
+
+  return {
+    get: get,
+    getIds: getIds,
+    commitChanges: commitChanges
+  };
 });
