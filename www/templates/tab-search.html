@@ -18,9 +18,12 @@
       <ion-item class="item-divider">
         Tracks - top results
       </ion-item>
-      <ion-item ng-repeat="item in trackResults">
+      <ion-item ng-repeat="item in trackResults" class="item-button-right">
         <h3>{{item.name}}</h3>
         <p>{{item.artists[0].name}} • {{item.album.name}}</p>
+        <button class="button button-clear button-stable button-large">
+          <i class="icon ion-android-add"></i>
+        </button>
       </ion-item>
     </ion-list>
 

@@ -33,6 +33,4 @@ angular.module('SearchCtrl', [])
   $scope.artistid = $stateParams.artistid
   $scope.artistName = $stateParams.artistName
   $scope.userid = $stateParams.userid
-
-
 })
