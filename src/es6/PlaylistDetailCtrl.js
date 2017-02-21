@@ -45,6 +45,7 @@ angular.module('PlaylistDetailCtrl', [])
   }
 
   function exitEditMode() {
+    console.log('exiting edit mode')
     resetSortOptions()
 
     $scope.editMode = false
@@ -153,7 +154,11 @@ angular.module('PlaylistDetailCtrl', [])
         .then(data => {
           Playlists
             .commitChanges(data.tracks.items, $scope.tracks, userid, listid)
-            .then(() => console.log('Changes committed'))
+            .then(() => {
+              showPlaylistSavedToast()
+              exitEditMode()
+              $scope.$apply()
+            })
         }).catch(error => {
           console.dir(error)
         })

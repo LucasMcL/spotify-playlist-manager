@@ -44,6 +44,7 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
   }
 
   function exitEditMode() {
+    console.log('exiting edit mode');
     resetSortOptions();
 
     $scope.editMode = false;
@@ -150,7 +151,9 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
       // Get playlist songs, pass that info and locally saved playlist to commitChanges
       Spotify.getPlaylist(userid, listid).then(function (data) {
         Playlists.commitChanges(data.tracks.items, $scope.tracks, userid, listid).then(function () {
-          return console.log('Changes committed');
+          showPlaylistSavedToast();
+          exitEditMode();
+          $scope.$apply();
         });
       }).catch(function (error) {
         console.dir(error);

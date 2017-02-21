@@ -88,6 +88,7 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
    * to update playlist
    * @param  {array} oldList - current state of playlist on Spotify before commiting changes
    * @param  {array} newList - locally saved array of track objects
+   * @return {promise} - resolved promise when async calls are done
    */
   function commitChanges(oldList, newList, userid, listid) {
     console.log('commitChanges function called');
@@ -122,7 +123,7 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
           resolve();
           return;
         }
-        range_start = remaining.indexOf(newUris[i]);console.log(range_start);
+        range_start = remaining.indexOf(newUris[i]);
         insert_before = i;
         console.log(i + ': moving track from ' + range_start + ' to before ' + insert_before);
 
