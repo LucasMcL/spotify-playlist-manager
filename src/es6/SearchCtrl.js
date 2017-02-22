@@ -23,8 +23,8 @@ angular.module('SearchCtrl', [])
     $scope.popover = popover;
   });
 
-  $scope.onAddButtonClick = function($event) {
-    $scope.popover.show($event);
+  $scope.onAddButtonClick = function($event, name) {
+    $scope.popover.show($event)
   };
 
   const SEARCH_BY = 'artist,track'

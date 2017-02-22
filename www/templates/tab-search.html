@@ -21,7 +21,7 @@
       <ion-item ng-repeat="item in trackResults" class="item-button-right">
         <h3>{{item.name}}</h3>
         <p>{{item.artists[0].name}} • {{item.album.name}}</p>
-        <button class="button button-clear button-stable button-large" ng-click="onAddButtonClick($event)">
+        <button class="button button-clear button-stable button-large" ng-click="onAddButtonClick($event, item.name)">
           <i class="icon ion-android-add"></i>
         </button>
       </ion-item>
@@ -45,9 +45,9 @@
         </ion-header-bar>
         <ion-content>
           <div class="list">
-            <div class="item" ng-repeat="playlist in playlists">
+            <a class="item" ng-repeat="playlist in playlists">
               {{playlist.name}}
-            </div>
+            </a>
           </div>
         </ion-content>
       </ion-popover-view>

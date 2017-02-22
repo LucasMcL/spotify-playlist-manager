@@ -25,7 +25,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
     $scope.popover = popover;
   });
 
-  $scope.onAddButtonClick = function ($event) {
+  $scope.onAddButtonClick = function ($event, name) {
     $scope.popover.show($event);
   };
 
