@@ -3,44 +3,61 @@ angular.module('SearchCtrl', [])
 .controller('SearchCtrl', function($scope, $ionicPopover, $cordovaToast, Spotify, Playlists, Auth) {
   console.log('SearchCtrl instantiated')
 
-  let userid = ""
-  let trackUri = ""
+  $scope.userid = ""
   $scope.trackResults = []
   $scope.artistResults = []
   $scope.playlists = []
+  let trackUri = ""
 
   // Perform auth check on view enter
   // Load in playlists after that resolves
+  // Save current user id
   $scope.$on("$ionicView.enter", function() {
     Auth.verify().then(() => {
       console.log('Auth has done been checked in the search ctrl')
       Playlists.get().then(playlists => $scope.playlists = playlists)
-      Auth.getCurrentUser().then(id => userid = id)
+      Auth.getCurrentUser().then(id => $scope.userid = id)
     })
   })
 
+  // Compile popover template and save to scope
   $ionicPopover.fromTemplateUrl('add-to-playlist.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popover = popover;
   });
 
+  /**
+   * Show list of playlists when user clicks add button
+   * Saves track uri as local variable
+   * @param  {obj} $event - Event object to bind the popover to
+   * @param  {string} uri - Track uri from track that was clicked
+   */
   $scope.onAddButtonClick = function($event, uri) {
     $scope.popover.show($event)
     trackUri = uri
   }
 
+  /**
+   * Add song to playlist that was clicked on
+   * Show toast when that completes
+   * @param  {obj} playlist - Object containing playlist details and metadata
+   */
   $scope.onPlaylistClick = function(playlist) {
     let playlistid = playlist.id
     let playlistName = playlist.name
     $scope.popover.hide()
-    Spotify.addPlaylistTracks(userid, playlistid, trackUri)
+    Spotify.addPlaylistTracks($scope.userid, playlistid, trackUri)
       .then(() => showSongAddedToast(playlistName))
       .catch(error => alert(error))
   }
 
-  const SEARCH_BY = 'artist,track'
+  /**
+   * Fetches search results on form submission
+   * @param  {string} query - Search query from user
+   */
   $scope.onSubmit = function(query) {
+    const SEARCH_BY = 'artist,track'
 
   	Spotify
   		 .search(query, SEARCH_BY, {limit: 5})
@@ -50,6 +67,10 @@ angular.module('SearchCtrl', [])
   		 })
   }
 
+  /**
+   * Shows toast showing what playlist song was added to
+   * @param  {string} playlistName - name of playlist song was added to
+   */
   function showSongAddedToast(playlistName) {
     $cordovaToast.showWithOptions({
       message: `Song added to ${playlistName}`,
