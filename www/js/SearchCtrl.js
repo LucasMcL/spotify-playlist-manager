@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ionicPopover, Spotify, Playlists, Auth) {
+angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ionicPopover, $cordovaToast, Spotify, Playlists, Auth) {
   console.log('SearchCtrl instantiated');
 
   var userid = "";
@@ -34,16 +34,18 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
     trackUri = uri;
   };
 
-  $scope.onPlaylistClick = function (playlistid) {
-    Spotify.addPlaylistTracks(userid, playlistid, trackUri).then(function (response) {
-      return console.log(response);
+  $scope.onPlaylistClick = function (playlist) {
+    var playlistid = playlist.id;
+    var playlistName = playlist.name;
+    $scope.popover.hide();
+    Spotify.addPlaylistTracks(userid, playlistid, trackUri).then(function () {
+      return showSongAddedToast(playlistName);
     }).catch(function (error) {
-      return console.log(error);
+      return alert(error);
     });
   };
 
   var SEARCH_BY = 'artist,track';
-
   $scope.onSubmit = function (query) {
 
     Spotify.search(query, SEARCH_BY, { limit: 5 }).then(function (data) {
@@ -51,6 +53,17 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
       $scope.artistResults = data.artists.items;
     });
   };
+
+  function showSongAddedToast(playlistName) {
+    $cordovaToast.showWithOptions({
+      message: 'Song added to ' + playlistName,
+      duration: "short",
+      position: "bottom",
+      addPixelsY: -175 // move up above tabs
+    }).catch(function (error) {
+      console.log(error);
+    });
+  }
 }).controller('ArtistDetailCtrl', function ($scope, Spotify, $stateParams) {
   $scope.artistid = $stateParams.artistid;
   $scope.artistName = $stateParams.artistName;

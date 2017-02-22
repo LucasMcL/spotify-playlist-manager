@@ -1,6 +1,6 @@
 angular.module('SearchCtrl', [])
 
-.controller('SearchCtrl', function($scope, $ionicPopover, Spotify, Playlists, Auth) {
+.controller('SearchCtrl', function($scope, $ionicPopover, $cordovaToast, Spotify, Playlists, Auth) {
   console.log('SearchCtrl instantiated')
 
   let userid = ""
@@ -30,14 +30,16 @@ angular.module('SearchCtrl', [])
     trackUri = uri
   }
 
-  $scope.onPlaylistClick = function(playlistid) {
+  $scope.onPlaylistClick = function(playlist) {
+    let playlistid = playlist.id
+    let playlistName = playlist.name
+    $scope.popover.hide()
     Spotify.addPlaylistTracks(userid, playlistid, trackUri)
-      .then(response => console.log(response))
-      .catch(error => console.log(error))
+      .then(() => showSongAddedToast(playlistName))
+      .catch(error => alert(error))
   }
 
   const SEARCH_BY = 'artist,track'
-
   $scope.onSubmit = function(query) {
 
   	Spotify
@@ -46,6 +48,17 @@ angular.module('SearchCtrl', [])
   		 		$scope.trackResults = data.tracks.items
   		 		$scope.artistResults = data.artists.items
   		 })
+  }
+
+  function showSongAddedToast(playlistName) {
+    $cordovaToast.showWithOptions({
+      message: `Song added to ${playlistName}`,
+      duration: "short",
+      position: "bottom",
+      addPixelsY: -175  // move up above tabs
+    }).catch(error => {
+      console.log(error)
+    })
   }
 })
 
