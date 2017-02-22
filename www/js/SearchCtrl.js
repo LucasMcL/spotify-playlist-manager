@@ -3,7 +3,8 @@
 angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ionicPopover, Spotify, Playlists, Auth) {
   console.log('SearchCtrl instantiated');
 
-  $scope.userid = "";
+  var userid = "";
+  var trackUri = "";
   $scope.trackResults = [];
   $scope.artistResults = [];
   $scope.playlists = [];
@@ -16,6 +17,9 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
       Playlists.get().then(function (playlists) {
         return $scope.playlists = playlists;
       });
+      Auth.getCurrentUser().then(function (id) {
+        return userid = id;
+      });
     });
   });
 
@@ -25,8 +29,17 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
     $scope.popover = popover;
   });
 
-  $scope.onAddButtonClick = function ($event, name) {
+  $scope.onAddButtonClick = function ($event, uri) {
     $scope.popover.show($event);
+    trackUri = uri;
+  };
+
+  $scope.onPlaylistClick = function (playlistid) {
+    Spotify.addPlaylistTracks(userid, playlistid, trackUri).then(function (response) {
+      return console.log(response);
+    }).catch(function (error) {
+      return console.log(error);
+    });
   };
 
   var SEARCH_BY = 'artist,track';
