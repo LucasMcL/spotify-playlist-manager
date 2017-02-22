@@ -39,10 +39,10 @@
     </ion-list>
 
     <script id="add-to-playlist.html" type="text/ng-template">
-      <ion-popover-view>
-<!--         <ion-header-bar>
+      <ion-popover-view style="height: {{(60 * playlists.length + 43) + 'px'}}; max-height: 300px; overflow-y: scroll; width: 300px">
+        <ion-header-bar>
           <h2 class="title">Add to Playlist</h2>
-        </ion-header-bar> -->
+        </ion-header-bar>
         <ion-content>
           <div class="list">
             <div class="item" ng-repeat="playlist in playlists">
