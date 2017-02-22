@@ -85,8 +85,20 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
       console.log(error);
     });
   }
-}).controller('ArtistDetailCtrl', function ($scope, Spotify, $stateParams) {
-  $scope.artistid = $stateParams.artistid;
+}).controller('ArtistDetailCtrl', function ($scope, $stateParams, Spotify, Auth) {
+  var artistid = $stateParams.artistid;
   $scope.artistName = $stateParams.artistName;
   $scope.userid = $stateParams.userid;
+
+  // Perform auth check on view enter
+  // Load in playlists after that resolves
+  // Save current user id
+  $scope.$on("$ionicView.enter", function () {
+    Auth.verify().then(function () {
+      console.log('Auth has done been checked in the artist detail ctrl');
+      Spotify.getArtistTopTracks(artistid, 'US').then(function (response) {
+        return console.log(response.tracks.length);
+      });
+    });
+  });
 });

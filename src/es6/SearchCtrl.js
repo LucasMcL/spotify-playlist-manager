@@ -83,8 +83,18 @@ angular.module('SearchCtrl', [])
   }
 })
 
-.controller('ArtistDetailCtrl', function($scope, Spotify, $stateParams) {
-  $scope.artistid = $stateParams.artistid
+.controller('ArtistDetailCtrl', function($scope, $stateParams, Spotify, Auth) {
+  let artistid = $stateParams.artistid
   $scope.artistName = $stateParams.artistName
   $scope.userid = $stateParams.userid
+
+  // Perform auth check on view enter
+  // Load in playlists after that resolves
+  // Save current user id
+  $scope.$on("$ionicView.enter", function() {
+    Auth.verify().then(() => {
+      console.log('Auth has done been checked in the artist detail ctrl')
+      Spotify.getArtistTopTracks(artistid, 'US').then(response => console.log(response.tracks.length))
+    })
+  })
 })
