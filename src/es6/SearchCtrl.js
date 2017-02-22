@@ -1,6 +1,6 @@
 angular.module('SearchCtrl', [])
 
-.controller('SearchCtrl', function($scope, Spotify, Playlists, Auth) {
+.controller('SearchCtrl', function($scope, $ionicPopover, Spotify, Playlists, Auth) {
   console.log('SearchCtrl instantiated')
 
   $scope.userid = ""
@@ -17,6 +17,16 @@ angular.module('SearchCtrl', [])
     })
   })
 
+  $ionicPopover.fromTemplateUrl('add-to-playlist.html', {
+    scope: $scope
+  }).then(function(popover) {
+    $scope.popover = popover;
+  });
+
+  $scope.onAddButtonClick = function($event) {
+    $scope.popover.show($event);
+  };
+
   const SEARCH_BY = 'artist,track'
 
   $scope.onSubmit = function(query) {
@@ -28,7 +38,6 @@ angular.module('SearchCtrl', [])
   		 		$scope.artistResults = data.artists.items
   		 })
   }
-
 })
 
 .controller('ArtistDetailCtrl', function($scope, Spotify, $stateParams) {

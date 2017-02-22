@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, Spotify, Playlists, Auth) {
+angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ionicPopover, Spotify, Playlists, Auth) {
   console.log('SearchCtrl instantiated');
 
   $scope.userid = "";
@@ -18,6 +18,16 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, Spot
       });
     });
   });
+
+  $ionicPopover.fromTemplateUrl('add-to-playlist.html', {
+    scope: $scope
+  }).then(function (popover) {
+    $scope.popover = popover;
+  });
+
+  $scope.onAddButtonClick = function ($event) {
+    $scope.popover.show($event);
+  };
 
   var SEARCH_BY = 'artist,track';
 
