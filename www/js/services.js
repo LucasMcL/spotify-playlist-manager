@@ -81,6 +81,18 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
     });
   }
 
+  function getNames() {
+    return Auth.getCurrentUser().then(function (userid) {
+      return Spotify.getUserPlaylists(userid).then(function (data) {
+        var names = [];
+        data.items.forEach(function (item) {
+          return names.push(item.name);
+        });
+        return names;
+      });
+    });
+  }
+
   /**
    * Takes locally saved track list and makes necessary reorder and delete requests to spotify
    * to update playlist
@@ -134,7 +146,7 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
     });
 
     /**
-     * Utility function to update the local array to new state after a
+     * Private function to update the local array to new state after a
      * single reorder has been completed
      */
     function updateRemaining() {
@@ -147,6 +159,7 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
   return {
     get: get,
     getIds: getIds,
+    getNames: getNames,
     commitChanges: commitChanges
   };
 });

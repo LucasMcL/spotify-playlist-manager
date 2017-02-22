@@ -77,6 +77,16 @@ angular.module('services', [])
     })
   }
 
+  function getNames() {
+    return Auth.getCurrentUser().then(userid => {
+      return Spotify.getUserPlaylists(userid).then(data => {
+        let names = []
+        data.items.forEach(item => names.push(item.name))
+        return names
+      })
+    })
+  }
+
   /**
    * Takes locally saved track list and makes necessary reorder and delete requests to spotify
    * to update playlist
@@ -124,7 +134,7 @@ angular.module('services', [])
     })
 
     /**
-     * Utility function to update the local array to new state after a
+     * Private function to update the local array to new state after a
      * single reorder has been completed
      */
     function updateRemaining() {
@@ -137,6 +147,7 @@ angular.module('services', [])
   return {
     get,
     getIds,
+    getNames,
     commitChanges
   }
 })

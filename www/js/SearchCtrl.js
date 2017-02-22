@@ -6,14 +6,16 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, Spot
   $scope.userid = "";
   $scope.trackResults = [];
   $scope.artistResults = [];
-  $scope.playlistids = [];
   $scope.playlists = [];
 
   // Perform auth check on view enter
   // Load in playlists after that resolves
   $scope.$on("$ionicView.enter", function () {
     Auth.verify().then(function () {
-      return console.log('Auth has done been checked in the search ctrl');
+      console.log('Auth has done been checked in the search ctrl');
+      Playlists.get().then(function (playlists) {
+        return $scope.playlists = playlists;
+      });
     });
   });
 
