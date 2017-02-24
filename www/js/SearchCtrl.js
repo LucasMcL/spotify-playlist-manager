@@ -89,6 +89,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
   var artistid = $stateParams.artistid;
   $scope.artistName = $stateParams.artistName;
   $scope.userid = $stateParams.userid;
+  $scope.tracks = [];
 
   // Perform auth check on view enter
   // Load in playlists after that resolves
@@ -97,7 +98,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
     Auth.verify().then(function () {
       console.log('Auth has done been checked in the artist detail ctrl');
       Spotify.getArtistTopTracks(artistid, 'US').then(function (response) {
-        return console.log(response.tracks.length);
+        return $scope.tracks = response.tracks;
       });
     });
   });

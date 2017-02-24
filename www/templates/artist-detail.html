@@ -1,21 +1,17 @@
-<ion-view title="Top tracks for {{artistName}}">
+<ion-view title="Top tracks">
   <ion-content class="padding">
 
-  	<h2 class="title">{{artistName}}</h2>
+  	<h2 class="title" style="text-align: center;">{{artistName}}</h2>
 
   	<ion-list>
       <ion-item ng-repeat="item in tracks">
         <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
         </ion-delete-button>
-        <h3>{{item.track.name}}</h3>
-        <p>{{item.track.artists[0].name}} • {{item.track.album.name}}</p>
+        <h3>{{item.name}}</h3>
+        <p>{{item.artists[0].name}} • {{item.album.name}}</p>
         <ion-reorder-button class="ion-navicon" on-reorder="onItemMove(item, $fromIndex, $toIndex)"></ion-reorder-button>
   		</ion-item>
   	</ion-list>
-
-    <p>{{artistid}}</p>
-    <p>{{artistName}}</p>
-    <p>{{userid}}</p>
 
   </ion-content>
 </ion-view>

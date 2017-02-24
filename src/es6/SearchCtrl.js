@@ -87,6 +87,7 @@ angular.module('SearchCtrl', [])
   let artistid = $stateParams.artistid
   $scope.artistName = $stateParams.artistName
   $scope.userid = $stateParams.userid
+  $scope.tracks = []
 
   // Perform auth check on view enter
   // Load in playlists after that resolves
@@ -94,7 +95,9 @@ angular.module('SearchCtrl', [])
   $scope.$on("$ionicView.enter", function() {
     Auth.verify().then(() => {
       console.log('Auth has done been checked in the artist detail ctrl')
-      Spotify.getArtistTopTracks(artistid, 'US').then(response => console.log(response.tracks.length))
+      Spotify.getArtistTopTracks(artistid, 'US').then(response => $scope.tracks = response.tracks)
     })
   })
+
+
 })
