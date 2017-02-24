@@ -32,14 +32,16 @@
       <ion-item class="item-divider">
         Artists - top results
       </ion-item>
-      <a ng-repeat="item in artistResults" class="item-avatar item" ui-sref="tab.artist-detail({artistid: item.id, artistName: item.name, userid: userid})">
+      <a ng-repeat="item in artistResults"
+         class="item-avatar item"
+         ui-sref="tab.artist-detail({artistid: item.id, artistName: item.name, userid: userid, artistImg: item.images[0].url})">
         <img ng-src="{{item.images[0].url}}">
         <h2>{{item.name}}</h2>
       </a>
     </ion-list>
 
     <script id="add-to-playlist.html" type="text/ng-template">
-      <ion-popover-view style="height: {{(60 * playlists.length + 43) + 'px'}}; max-height: 300px; overflow-y: scroll; width: 300px">
+      <ion-popover-view>
         <ion-header-bar>
           <h2 class="title">Add to Playlist</h2>
         </ion-header-bar>

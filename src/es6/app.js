@@ -69,7 +69,7 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
       }
     })
     .state('tab.artist-detail', {
-      url: 'search/:artistid/:artistName/:userid',
+      url: 'search/:artistid/:artistName/:artistImg/:userid',
       views: {
         'tab-search': {
           templateUrl: 'templates/artist-detail.html',

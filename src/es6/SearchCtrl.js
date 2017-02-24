@@ -87,6 +87,7 @@ angular.module('SearchCtrl', [])
   let artistid = $stateParams.artistid
   $scope.artistName = $stateParams.artistName
   $scope.userid = $stateParams.userid
+  $scope.artistImg = $stateParams.artistImg
   $scope.tracks = []
 
   // Perform auth check on view enter
