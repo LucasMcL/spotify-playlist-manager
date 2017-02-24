@@ -21,7 +21,7 @@ angular.module('SearchCtrl', [])
   })
 
   // Compile popover template and save to scope
-  $ionicPopover.fromTemplateUrl('add-to-playlist.html', {
+  $ionicPopover.fromTemplateUrl('templates/popover/add-to-playlist.html', {
     scope: $scope
   }).then(function(popover) {
     $scope.popover = popover;
