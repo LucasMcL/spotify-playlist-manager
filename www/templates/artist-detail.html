@@ -7,30 +7,16 @@
 
     <!-- Artist top songs -->
     <ion-list>
-      <ion-item ng-repeat="item in tracks">
-        <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
-        </ion-delete-button>
+      <ion-item ng-repeat="item in tracks" class="item-button-right">
         <h3>{{item.name}}</h3>
         <p>{{item.artists[0].name}} • {{item.album.name}}</p>
-        <ion-reorder-button class="ion-navicon" on-reorder="onItemMove(item, $fromIndex, $toIndex)"></ion-reorder-button>
+        <button class="button button-clear button-stable button-large" ng-click="onAddButtonClick($event, item.uri)">
+          <i class="icon ion-android-add"></i>
+        </button>
       </ion-item>
     </ion-list>
 
-    <!-- Add to playlist popover -->
-<!--     <script id="add-to-playlist.html" type="text/ng-template">
-      <ion-popover-view>
-        <ion-header-bar>
-          <h2 class="title">Add to Playlist</h2>
-        </ion-header-bar>
-        <ion-content>
-          <div class="list">
-            <a class="item" ng-repeat="playlist in playlists" ng-click="onPlaylistClick(playlist)">
-              {{playlist.name}}
-            </a>
-          </div>
-        </ion-content>
-      </ion-popover-view>
-    </script> -->
+    <p>{{playlists}}</p>
 
   </ion-content>
 </ion-view>

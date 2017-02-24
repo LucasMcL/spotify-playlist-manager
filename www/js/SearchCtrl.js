@@ -70,12 +70,14 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
       $scope.artistResults = data.artists.items;
     });
   };
-}).controller('ArtistDetailCtrl', function ($scope, $stateParams, Spotify, Auth) {
+}).controller('ArtistDetailCtrl', function ($scope, $stateParams, $ionicPopover, Spotify, Auth) {
   var artistid = $stateParams.artistid;
   $scope.artistName = $stateParams.artistName;
   $scope.userid = $stateParams.userid;
   $scope.artistImg = $stateParams.artistImg;
   $scope.tracks = [];
+  $scope.playlists = [];
+  var trackUri = void 0;
 
   // Perform auth check on view enter
   // Load in playlists after that resolves
@@ -86,6 +88,21 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
       Spotify.getArtistTopTracks(artistid, 'US').then(function (response) {
         return $scope.tracks = response.tracks;
       });
+      Playlists.get().then(function (playlists) {
+        return $scope.playlists = playlists;
+      });
     });
   });
+
+  // Compile popover template and save to scope
+  $ionicPopover.fromTemplateUrl('templates/popover/add-to-playlist.html', {
+    scope: $scope
+  }).then(function (popover) {
+    $scope.popover = popover;
+  });
+
+  $scope.onAddButtonClick = function ($event, uri) {
+    $scope.popover.show($event);
+    trackUri = uri;
+  };
 });
