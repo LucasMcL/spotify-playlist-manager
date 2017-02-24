@@ -52,7 +52,7 @@ angular.module('services', [])
   }
 })
 
-.factory('Playlists', function(Spotify, Auth) {
+.factory('Playlists', function(Spotify, $cordovaToast, Auth) {
   /**
    * Fetches current user's id, then returns array of playlists
    * @return {array} - array of playlist objects
@@ -84,6 +84,21 @@ angular.module('services', [])
         data.items.forEach(item => names.push(item.name))
         return names
       })
+    })
+  }
+
+  /**
+   * Shows toast showing what playlist song was added to
+   * @param  {string} playlistName - name of playlist song was added to
+   */
+  function showSongAddedToast(playlistName) {
+    $cordovaToast.showWithOptions({
+      message: `Song added to ${playlistName}`,
+      duration: "short",
+      position: "bottom",
+      addPixelsY: -175  // move up above tabs
+    }).catch(error => {
+      console.log(error)
     })
   }
 
@@ -148,6 +163,7 @@ angular.module('services', [])
     get,
     getIds,
     getNames,
+    showSongAddedToast,
     commitChanges
   }
 })

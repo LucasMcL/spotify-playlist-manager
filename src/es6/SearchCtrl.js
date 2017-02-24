@@ -48,7 +48,7 @@ angular.module('SearchCtrl', [])
     let playlistName = playlist.name
     $scope.popover.hide()
     Spotify.addPlaylistTracks($scope.userid, playlistid, trackUri)
-      .then(() => showSongAddedToast(playlistName))
+      .then(() => Playlists.showSongAddedToast(playlistName))
       .catch(error => alert(error))
   }
 
@@ -65,21 +65,6 @@ angular.module('SearchCtrl', [])
   		 		$scope.trackResults = data.tracks.items
   		 		$scope.artistResults = data.artists.items
   		 })
-  }
-
-  /**
-   * Shows toast showing what playlist song was added to
-   * @param  {string} playlistName - name of playlist song was added to
-   */
-  function showSongAddedToast(playlistName) {
-    $cordovaToast.showWithOptions({
-      message: `Song added to ${playlistName}`,
-      duration: "short",
-      position: "bottom",
-      addPixelsY: -175  // move up above tabs
-    }).catch(error => {
-      console.log(error)
-    })
   }
 })
 

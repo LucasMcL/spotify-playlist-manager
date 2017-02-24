@@ -52,7 +52,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
     var playlistName = playlist.name;
     $scope.popover.hide();
     Spotify.addPlaylistTracks($scope.userid, playlistid, trackUri).then(function () {
-      return showSongAddedToast(playlistName);
+      return Playlists.showSongAddedToast(playlistName);
     }).catch(function (error) {
       return alert(error);
     });
@@ -70,21 +70,6 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
       $scope.artistResults = data.artists.items;
     });
   };
-
-  /**
-   * Shows toast showing what playlist song was added to
-   * @param  {string} playlistName - name of playlist song was added to
-   */
-  function showSongAddedToast(playlistName) {
-    $cordovaToast.showWithOptions({
-      message: 'Song added to ' + playlistName,
-      duration: "short",
-      position: "bottom",
-      addPixelsY: -175 // move up above tabs
-    }).catch(function (error) {
-      console.log(error);
-    });
-  }
 }).controller('ArtistDetailCtrl', function ($scope, $stateParams, Spotify, Auth) {
   var artistid = $stateParams.artistid;
   $scope.artistName = $stateParams.artistName;
