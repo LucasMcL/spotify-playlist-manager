@@ -64,30 +64,6 @@ angular.module('services', [])
   }
 
   /**
-   * Fetches current user's id, then playlists, then returns array of playlist ids
-   * @return {array} - array of playlist ids
-   */
-  function getIds() {
-    return Auth.getCurrentUser().then(userid => {
-      return Spotify.getUserPlaylists(userid).then(data => {
-        let ids = []
-        data.items.forEach(item => ids.push(item.id))
-        return ids
-      })
-    })
-  }
-
-  function getNames() {
-    return Auth.getCurrentUser().then(userid => {
-      return Spotify.getUserPlaylists(userid).then(data => {
-        let names = []
-        data.items.forEach(item => names.push(item.name))
-        return names
-      })
-    })
-  }
-
-  /**
    * Shows toast showing what playlist song was added to
    * @param  {string} playlistName - name of playlist song was added to
    */
@@ -161,8 +137,6 @@ angular.module('services', [])
 
   return {
     get,
-    getIds,
-    getNames,
     showSongAddedToast,
     commitChanges
   }

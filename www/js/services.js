@@ -66,34 +66,6 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
   }
 
   /**
-   * Fetches current user's id, then playlists, then returns array of playlist ids
-   * @return {array} - array of playlist ids
-   */
-  function getIds() {
-    return Auth.getCurrentUser().then(function (userid) {
-      return Spotify.getUserPlaylists(userid).then(function (data) {
-        var ids = [];
-        data.items.forEach(function (item) {
-          return ids.push(item.id);
-        });
-        return ids;
-      });
-    });
-  }
-
-  function getNames() {
-    return Auth.getCurrentUser().then(function (userid) {
-      return Spotify.getUserPlaylists(userid).then(function (data) {
-        var names = [];
-        data.items.forEach(function (item) {
-          return names.push(item.name);
-        });
-        return names;
-      });
-    });
-  }
-
-  /**
    * Shows toast showing what playlist song was added to
    * @param  {string} playlistName - name of playlist song was added to
    */
@@ -173,8 +145,6 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
 
   return {
     get: get,
-    getIds: getIds,
-    getNames: getNames,
     showSongAddedToast: showSongAddedToast,
     commitChanges: commitChanges
   };
