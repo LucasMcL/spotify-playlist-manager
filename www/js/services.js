@@ -58,6 +58,7 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
    * @return {array} - array of playlist objects
    */
   function get() {
+    console.log('getting playlists');
     return Auth.getCurrentUser().then(function (userid) {
       return Spotify.getUserPlaylists(userid).then(function (data) {
         return data.items;

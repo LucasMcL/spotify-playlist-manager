@@ -58,6 +58,7 @@ angular.module('services', [])
    * @return {array} - array of playlist objects
    */
   function get() {
+    console.log('getting playlists')
     return Auth.getCurrentUser().then(userid => {
       return Spotify.getUserPlaylists(userid).then(data => data.items)
     })

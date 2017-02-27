@@ -54,7 +54,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
     Spotify.addPlaylistTracks($scope.userid, playlistid, trackUri).then(function () {
       return Playlists.showSongAddedToast(playlistName);
     }).catch(function (error) {
-      return alert(error);
+      return alert('There was an error adding to that playlist');
     });
   };
 
@@ -70,7 +70,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
       $scope.artistResults = data.artists.items;
     });
   };
-}).controller('ArtistDetailCtrl', function ($scope, $stateParams, $ionicPopover, Spotify, Auth) {
+}).controller('ArtistDetailCtrl', function ($scope, $stateParams, $ionicPopover, Spotify, Auth, Playlists) {
   var artistid = $stateParams.artistid;
   $scope.artistName = $stateParams.artistName;
   $scope.userid = $stateParams.userid;
@@ -104,5 +104,21 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
   $scope.onAddButtonClick = function ($event, uri) {
     $scope.popover.show($event);
     trackUri = uri;
+  };
+
+  /**
+   * Add song to playlist that was clicked on
+   * Show toast when that completes
+   * @param  {obj} playlist - Object containing playlist details and metadata
+   */
+  $scope.onPlaylistClick = function (playlist) {
+    var playlistid = playlist.id;
+    var playlistName = playlist.name;
+    $scope.popover.hide();
+    Spotify.addPlaylistTracks($scope.userid, playlistid, trackUri).then(function () {
+      return Playlists.showSongAddedToast(playlistName);
+    }).catch(function (error) {
+      return alert('There was an error adding to that playlist');
+    });
   };
 });
