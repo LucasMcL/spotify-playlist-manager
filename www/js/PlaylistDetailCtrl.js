@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', function ($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $cordovaToast, Playlists) {
+angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', function ($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $ionicLoading, $cordovaToast, Playlists) {
   console.log('playlist detail control instantiated');
 
   // Grab variables from route paramaters
@@ -139,6 +139,17 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
     orderSongs();
   };
 
+  function showLoadingSpinner() {
+    console.log('show loading spinner');
+    $ionicLoading.show({
+      content: 'Saving changes',
+      animation: 'fade-in',
+      showBackdrop: true,
+      maxWidth: 200,
+      showDelay: 0
+    });
+  }
+
   /**
    * attempts post of new playlist state to Spotify if changes were made
    */
@@ -150,9 +161,11 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
       console.log('save changes');
       // Get playlist songs, pass that info and locally saved playlist to commitChanges
       Spotify.getPlaylist(userid, listid).then(function (data) {
+        showLoadingSpinner();
         Playlists.commitChanges(data.tracks.items, $scope.tracks, userid, listid).then(function () {
           showPlaylistSavedToast();
           exitEditMode();
+          $ionicLoading.hide(); // hide loading spinner
           $scope.$apply();
         });
       }).catch(function (error) {
