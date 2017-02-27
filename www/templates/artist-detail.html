@@ -1,0 +1,24 @@
+<ion-view title="Top tracks">
+  <ion-content class="padding has-tabs-bottom">
+
+    <!-- Artist name and picture -->
+    <h2 class="title">{{artistName}}</h2>
+    <!-- <img ng-src="{{artistImg}}"> -->
+
+    <!-- Artist top songs -->
+    <ion-list>
+      <ion-item ng-repeat="item in tracks" class="item-button-right">
+        <h3>{{item.name}}</h3>
+        <p>{{item.artists[0].name}} • {{item.album.name}}</p>
+        <button class="button button-clear button-stable button-large" ng-click="onAddButtonClick($event, item.uri)">
+          <i class="icon ion-android-add"></i>
+        </button>
+      </ion-item>
+    </ion-list>
+
+    <p>{{playlists}}</p>
+
+  </ion-content>
+</ion-view>
+
+

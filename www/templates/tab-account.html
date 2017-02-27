@@ -1,9 +1,9 @@
 <ion-view view-title="Account">
-  <ion-content>
+  <ion-content class="padding">
     <ion-list>
-    <ion-toggle  ng-model="settings.enableFriends">
-        Enable Friends
-    </ion-toggle>
+		<button class="button button-block button-assertive" ng-click="performLogout()">
+		  Log out
+		</button>
     </ion-list>
   </ion-content>
 </ion-view>
