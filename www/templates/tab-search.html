@@ -1,0 +1,44 @@
+<ion-view view-title="Search Arist or Track">
+  <ion-content>
+
+    <!-- Search Bar -->
+    <form class="item item-input-inset" ng-submit="onSubmit(query)">
+      <label class="item-input-wrapper">
+        <!-- query doesn't exist on scope of SearchCtrl -->
+        <!-- Must be passed to ctrl through onSubmit function -->
+        <input type="text" placeholder="Search" ng-model="query">
+      </label>
+      <button class="button button-small">
+        Submit
+      </button>
+    </form>
+
+    <!-- Track Results -->
+    <ion-list>
+      <ion-item class="item-divider" ng-show="searchPerformed">
+        Tracks - top results
+      </ion-item>
+      <ion-item ng-repeat="item in trackResults" class="item-button-right">
+        <h3>{{item.name}}</h3>
+        <p>{{item.artists[0].name}} • {{item.album.name}}</p>
+        <button class="button button-clear button-stable button-large" ng-click="onAddButtonClick($event, item.uri)">
+          <i class="icon ion-android-add"></i>
+        </button>
+      </ion-item>
+    </ion-list>
+
+    <!-- Artist Results -->
+    <ion-list>
+      <ion-item class="item-divider" ng-show="searchPerformed">
+        Artists - top results
+      </ion-item>
+      <a ng-repeat="item in artistResults"
+         class="item-avatar item"
+         ui-sref="tab.artist-detail({artistid: item.id, artistName: item.name, userid: userid, artistImg: item.images[0].url})">
+        <img ng-src="{{item.images[0].url}}">
+        <h2>{{item.name}}</h2>
+      </a>
+    </ion-list>
+
+  </ion-content>
+</ion-view>

@@ -1,0 +1,25 @@
+<!--
+This is the default view of the app
+This template loads for the 'tab.playlists' state (app.js)
+playlists var created by fetching a user's playlists through Spotify (controllers.js)
+-->
+
+<!--
+ui-sref navigates to the playlists-detail state
+It passes the user id, playlist id, and playlist name to the url
+These variables are then retrieved by that controller (controllers.js)
+-->
+<ion-view title="My Playlists">
+	<ion-content class="has-header">
+		<div class="list">
+			<a ng-repeat="playlist in playlists"
+				 class="item item-thumbnail-left"
+				 ui-sref="tab.playlists-detail({listid: playlist.id, userid: playlist.owner.id, listTitle: playlist.name})">
+				<img ng-src="{{playlist.images[0].url}}">
+				<h2>{{playlist.name}}</h2>
+			</a>
+		</div>
+	</ion-content>
+</ion-view>
+
+

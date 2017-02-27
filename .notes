@@ -1,9 +1,0 @@
-ionic serve to run in browser
-ionic emulate or ionic run to test in actual device
-
-hacky way:
-user angular spotify to display login window
-every 30 seconds, redo login using interval
-
-better way:
-spin up local node server to handle auth stuff

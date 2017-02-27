@@ -1,0 +1,52 @@
+<!--
+This template loads for the 'tab.playlists-detail' state (app.js)
+tracks is list of songs in playlist, retreived from spotify (controller.js)
+-->
+
+<ion-view title="{{playlistTitle}}">
+  <ion-nav-buttons side="secondary">
+    <button class="button button-icon icon ion-edit" ng-click="onEditButtonTap()"></button>
+  </ion-nav-buttons>
+  <ion-content class="padding">
+
+    <!-- Order songs by: -->
+    <ion-item class="item-input item-select" ng-show="editMode">
+      <div class="input-label">
+        Order by
+      </div>
+      <select ng-model="$parent.$parent.orderCriteria" ng-change="onSelectChange(orderCriteria)">
+        <option selected value="none">None</option>
+        <option value="song">Song</option>
+        <option value="artist">Artist</option>
+        <option value="album">Album</option>
+        <option value="length">Song length</option>
+      </select>
+    </ion-item>
+
+    <!-- Ascending / Descending -->
+    <ion-toggle ng-model="$parent.descending" ng-show="editMode && orderCriteria !== 'none'" ng-change="onDescendToggle(descending)">Descending?</ion-toggle>
+
+    <!-- Playlist songs -->
+    <ion-list show-reorder="editMode", show-delete="editMode">
+
+      <ion-item ng-repeat="item in tracks">
+        <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
+        </ion-delete-button>
+        <h3>{{item.track.name}}</h3>
+        <p>{{item.track.artists[0].name}} • {{item.track.album.name}}</p>
+        <ion-reorder-button class="ion-navicon" on-reorder="onItemMove(item, $fromIndex, $toIndex)"></ion-reorder-button>
+      </ion-item>
+
+    </ion-list>
+
+    <!-- Save/cancel buttons shown in edit mode -->
+    <button class="button button-block button-balanced" ng-show="editMode" ng-click=saveChanges()>
+      Save
+    </button>
+    <button class="button button-block button-stable" ng-show="editMode" ng-click="cancelChanges()">
+      Discard changes
+    </button>
+  </ion-content>
+</ion-view>
+
+
