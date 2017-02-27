@@ -1,5 +1,5 @@
-# spotify-playlist-manager
-Organize your Spotify playlists on your android device
+# Spotify Playlist Manager
+Organize and edit your Spotify playlists on your android device
 
 # Links
 1. https://trello.com/b/EY0AJ0Zl/spotify-playlist-manager
