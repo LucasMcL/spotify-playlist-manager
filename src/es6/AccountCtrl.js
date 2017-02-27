@@ -1,4 +1,4 @@
-angular.module('GenieCtrl', [])
+angular.module('AccountCtrl', [])
 
 .controller('AccountCtrl', function($scope, $cordovaOauth, Spotify, Auth) {
   console.log('accounts ctrl instantiated')
@@ -9,8 +9,9 @@ angular.module('GenieCtrl', [])
     })
   })
 
-  $scope.clearCookies = function() {
+  $scope.performLogout = function() {
   	console.log('clearing cookies')
-  	localStorage.removeItem("spotify-token");
+  	localStorage.removeItem("spotify-token")
+    Auth.performLogin()
   }
 })

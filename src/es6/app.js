@@ -1,6 +1,6 @@
 // Initialize app
 // Inject dependencies
-angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
+angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'AccountCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -69,7 +69,7 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
       }
     })
     .state('tab.artist-detail', {
-      url: 'search/:artistid/:artistName/:userid',
+      url: 'search/:artistid/:artistName/:artistImg/:userid',
       views: {
         'tab-search': {
           templateUrl: 'templates/artist-detail.html',

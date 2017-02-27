@@ -1,21 +1,22 @@
-<ion-view title="Artist Top Songs">
-  <ion-content class="padding">
+<ion-view title="Top tracks">
+  <ion-content class="padding has-tabs-bottom">
 
-  	<h2>{{artistName}}</h2>
+    <!-- Artist name and picture -->
+    <h2 class="title">{{artistName}}</h2>
+    <!-- <img ng-src="{{artistImg}}"> -->
 
-  	<ion-list>
-      <ion-item ng-repeat="item in tracks">
-        <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)">
-        </ion-delete-button>
-        <h3>{{item.track.name}}</h3>
-        <p>{{item.track.artists[0].name}} • {{item.track.album.name}}</p>
-        <ion-reorder-button class="ion-navicon" on-reorder="onItemMove(item, $fromIndex, $toIndex)"></ion-reorder-button>
-  		</ion-item>
-  	</ion-list>
+    <!-- Artist top songs -->
+    <ion-list>
+      <ion-item ng-repeat="item in tracks" class="item-button-right">
+        <h3>{{item.name}}</h3>
+        <p>{{item.artists[0].name}} • {{item.album.name}}</p>
+        <button class="button button-clear button-stable button-large" ng-click="onAddButtonClick($event, item.uri)">
+          <i class="icon ion-android-add"></i>
+        </button>
+      </ion-item>
+    </ion-list>
 
-    <p>{{artistid}}</p>
-    <p>{{artistName}}</p>
-    <p>{{userid}}</p>
+    <p>{{playlists}}</p>
 
   </ion-content>
 </ion-view>

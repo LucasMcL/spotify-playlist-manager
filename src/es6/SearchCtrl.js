@@ -7,6 +7,7 @@ angular.module('SearchCtrl', [])
   $scope.trackResults = []
   $scope.artistResults = []
   $scope.playlists = []
+  $scope.searchPerformed = false
   let trackUri = ""
 
   // Perform auth check on view enter
@@ -21,11 +22,11 @@ angular.module('SearchCtrl', [])
   })
 
   // Compile popover template and save to scope
-  $ionicPopover.fromTemplateUrl('add-to-playlist.html', {
+  $ionicPopover.fromTemplateUrl('templates/popover/add-to-playlist.html', {
     scope: $scope
   }).then(function(popover) {
-    $scope.popover = popover;
-  });
+    $scope.popover = popover
+  })
 
   /**
    * Show list of playlists when user clicks add button
@@ -48,8 +49,8 @@ angular.module('SearchCtrl', [])
     let playlistName = playlist.name
     $scope.popover.hide()
     Spotify.addPlaylistTracks($scope.userid, playlistid, trackUri)
-      .then(() => showSongAddedToast(playlistName))
-      .catch(error => alert(error))
+      .then(() => Playlists.showSongAddedToast(playlistName))
+      .catch(error => alert('There was an error adding to that playlist'))
   }
 
   /**
@@ -58,6 +59,7 @@ angular.module('SearchCtrl', [])
    */
   $scope.onSubmit = function(query) {
     const SEARCH_BY = 'artist,track'
+    $scope.searchPerformed = true
 
   	Spotify
   		 .search(query, SEARCH_BY, {limit: 5})
@@ -66,25 +68,58 @@ angular.module('SearchCtrl', [])
   		 		$scope.artistResults = data.artists.items
   		 })
   }
+})
+
+.controller('ArtistDetailCtrl', function($scope, $stateParams, $ionicPopover, Spotify, Auth, Playlists) {
+  let artistid = $stateParams.artistid
+  $scope.artistName = $stateParams.artistName
+  $scope.userid = $stateParams.userid
+  $scope.artistImg = $stateParams.artistImg
+  $scope.tracks = []
+  $scope.playlists = []
+  let trackUri
+
+  // Perform auth check on view enter
+  // Load in playlists after that resolves
+  // Save current user id
+  $scope.$on("$ionicView.enter", function() {
+    Auth.verify().then(() => {
+      console.log('Auth has done been checked in the artist detail ctrl')
+      Spotify.getArtistTopTracks(artistid, 'US').then(response => $scope.tracks = response.tracks)
+      Playlists.get().then(playlists => $scope.playlists = playlists)
+    })
+  })
+
+  // Compile popover template and save to scope
+  $ionicPopover.fromTemplateUrl('templates/popover/add-to-playlist.html', {
+    scope: $scope
+  }).then( popover => {
+    $scope.popover = popover
+  })
+
+  $scope.onAddButtonClick = function($event, uri) {
+    $scope.popover.show($event)
+    trackUri = uri
+  }
 
   /**
-   * Shows toast showing what playlist song was added to
-   * @param  {string} playlistName - name of playlist song was added to
+   * Add song to playlist that was clicked on
+   * Show toast when that completes
+   * @param  {obj} playlist - Object containing playlist details and metadata
    */
-  function showSongAddedToast(playlistName) {
-    $cordovaToast.showWithOptions({
-      message: `Song added to ${playlistName}`,
-      duration: "short",
-      position: "bottom",
-      addPixelsY: -175  // move up above tabs
-    }).catch(error => {
-      console.log(error)
-    })
+  $scope.onPlaylistClick = function(playlist) {
+    let playlistid = playlist.id
+    let playlistName = playlist.name
+    $scope.popover.hide()
+    Spotify.addPlaylistTracks($scope.userid, playlistid, trackUri)
+      .then(() => Playlists.showSongAddedToast(playlistName))
+      .catch(error => alert('There was an error adding to that playlist'))
   }
 })
 
-.controller('ArtistDetailCtrl', function($scope, Spotify, $stateParams) {
-  $scope.artistid = $stateParams.artistid
-  $scope.artistName = $stateParams.artistName
-  $scope.userid = $stateParams.userid
-})
+
+
+
+
+
+

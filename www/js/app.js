@@ -2,7 +2,7 @@
 
 // Initialize app
 // Inject dependencies
-angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'GenieCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify']).run(function ($ionicPlatform) {
+angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtrl', 'AccountCtrl', 'SearchCtrl', 'services', 'ngCordovaOauth', 'ngCordova', 'spotify']).run(function ($ionicPlatform) {
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -64,7 +64,7 @@ angular.module('playlist-manager', ['ionic', 'PlaylistDetailCtrl', 'PlaylistsCtr
       }
     }
   }).state('tab.artist-detail', {
-    url: 'search/:artistid/:artistName/:userid',
+    url: 'search/:artistid/:artistName/:artistImg/:userid',
     views: {
       'tab-search': {
         templateUrl: 'templates/artist-detail.html',

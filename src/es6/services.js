@@ -4,19 +4,6 @@ angular.module('services', [])
   const CLIENT_ID = 'd3fe3362f8634a1b82b89ab344238891'
   const SCOPE = ['user-read-private', 'playlist-read-private', 'playlist-modify-public', 'playlist-modify-private']
 
-  //Private
-  /**
-   * Utility function valled by verifyToken
-   * @return {promise} - Returns promise that resolves after user logs in
-   */
-  function performLogin() {
-    return $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
-      window.localStorage.setItem('spotify-token', result.access_token)
-      Spotify.setAuthToken(result.access_token)
-    }, function(error) {
-      console.dir(error)
-    })
-  }
 
   //Public
   /**
@@ -25,6 +12,20 @@ angular.module('services', [])
    */
   function getCurrentUser() {
     return Spotify.getCurrentUser().then(user => { return user.id })
+  }
+
+  /**
+   * Performs login using $cordovaOauth
+   * @return {promise} - Returns promise that resolves after user logs in
+   */
+  function performLogin() {
+    console.log('logging in')
+    return $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
+      window.localStorage.setItem('spotify-token', result.access_token)
+      Spotify.setAuthToken(result.access_token)
+    }, function(error) {
+      console.dir(error)
+    })
   }
 
   /**
@@ -48,42 +49,35 @@ angular.module('services', [])
 
   return {
     getCurrentUser,
+    performLogin,
     verify
   }
 })
 
-.factory('Playlists', function(Spotify, Auth) {
+.factory('Playlists', function(Spotify, $cordovaToast, Auth) {
   /**
    * Fetches current user's id, then returns array of playlists
    * @return {array} - array of playlist objects
    */
   function get() {
+    console.log('getting playlists')
     return Auth.getCurrentUser().then(userid => {
       return Spotify.getUserPlaylists(userid).then(data => data.items)
     })
   }
 
   /**
-   * Fetches current user's id, then playlists, then returns array of playlist ids
-   * @return {array} - array of playlist ids
+   * Shows toast showing what playlist song was added to
+   * @param  {string} playlistName - name of playlist song was added to
    */
-  function getIds() {
-    return Auth.getCurrentUser().then(userid => {
-      return Spotify.getUserPlaylists(userid).then(data => {
-        let ids = []
-        data.items.forEach(item => ids.push(item.id))
-        return ids
-      })
-    })
-  }
-
-  function getNames() {
-    return Auth.getCurrentUser().then(userid => {
-      return Spotify.getUserPlaylists(userid).then(data => {
-        let names = []
-        data.items.forEach(item => names.push(item.name))
-        return names
-      })
+  function showSongAddedToast(playlistName) {
+    $cordovaToast.showWithOptions({
+      message: `Song added to ${playlistName}`,
+      duration: "short",
+      position: "bottom",
+      addPixelsY: -175  // move up above tabs
+    }).catch(error => {
+      console.log(error)
     })
   }
 
@@ -146,8 +140,7 @@ angular.module('services', [])
 
   return {
     get,
-    getIds,
-    getNames,
+    showSongAddedToast,
     commitChanges
   }
 })
