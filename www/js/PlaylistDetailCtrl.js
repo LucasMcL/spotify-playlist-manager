@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', function ($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $ionicLoading, $cordovaToast, Playlists) {
+angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', function ($scope, $state, $stateParams, Spotify, $ionicNavBarDelegate, $ionicPopup, $ionicPlatform, $ionicHistory, $ionicLoading, $cordovaToast, Playlists, Auth) {
   console.log('playlist detail control instantiated');
 
   // Grab variables from route paramaters
@@ -16,7 +16,13 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
   var editLog = [];
 
   $scope.tracks = [];
-  getTracks(); // load tracks immediately
+
+  $scope.$on("$ionicView.enter", function () {
+    Auth.verify().then(function () {
+      console.log('auth has done been checked in the playlist details ctrl');
+      getTracks();
+    });
+  });
 
   /**
    * Get tracks for playlist using playlist id and user id
