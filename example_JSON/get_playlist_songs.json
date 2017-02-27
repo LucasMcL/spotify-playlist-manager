@@ -1,0 +1,165 @@
+//Get playlist songs
+
+{
+  "href" : "https://api.spotify.com/v1/users/testuserspotifyapp/playlists/4mAV8pRdioaMm5IX8NJWWk/tracks?offset=0&limit=100",
+  "items" : [ {
+    "added_at" : "2017-02-09T16:23:22Z",
+    "added_by" : {
+      "external_urls" : {
+        "spotify" : "http://open.spotify.com/user/testuserspotifyapp"
+      },
+      "href" : "https://api.spotify.com/v1/users/testuserspotifyapp",
+      "id" : "testuserspotifyapp",
+      "type" : "user",
+      "uri" : "spotify:user:testuserspotifyapp"
+    },
+    "is_local" : false,
+    "track" : {
+      "album" : {
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF"
+          },
+          "href" : "https://api.spotify.com/v1/artists/41MozSoPIsD1dJM0CLPjZF",
+          "id" : "41MozSoPIsD1dJM0CLPjZF",
+          "name" : "BLACKPINK",
+          "type" : "artist",
+          "uri" : "spotify:artist:41MozSoPIsD1dJM0CLPjZF"
+        } ],
+        "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TR", "TW", "US", "UY" ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/1Ovk2wzDGAGYVeHdPj8Eoe"
+        },
+        "href" : "https://api.spotify.com/v1/albums/1Ovk2wzDGAGYVeHdPj8Eoe",
+        "id" : "1Ovk2wzDGAGYVeHdPj8Eoe",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/11ead4436422fc871500590cd7f33c52fc46cc00",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/544469b2091ec2245a36b9f3bf1c387401d01170",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/ef16c18c0baa4fff98da1f8627020ccacfe149ea",
+          "width" : 64
+        } ],
+        "name" : "SQUARE TWO",
+        "type" : "album",
+        "uri" : "spotify:album:1Ovk2wzDGAGYVeHdPj8Eoe"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/41MozSoPIsD1dJM0CLPjZF"
+        },
+        "href" : "https://api.spotify.com/v1/artists/41MozSoPIsD1dJM0CLPjZF",
+        "id" : "41MozSoPIsD1dJM0CLPjZF",
+        "name" : "BLACKPINK",
+        "type" : "artist",
+        "uri" : "spotify:artist:41MozSoPIsD1dJM0CLPjZF"
+      } ],
+      "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TR", "TW", "US", "UY" ],
+      "disc_number" : 1,
+      "duration_ms" : 197355,
+      "explicit" : false,
+      "external_ids" : {
+        "isrc" : "KRA401600236"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/5ANbXf5qR48a4jfFnSq80w"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/5ANbXf5qR48a4jfFnSq80w",
+      "id" : "5ANbXf5qR48a4jfFnSq80w",
+      "name" : "PLAYING WITH FIRE",
+      "popularity" : 71,
+      "preview_url" : "https://p.scdn.co/mp3-preview/3574e5e8baaf074b8c703d49b2e267dc4b7b6ea4?cid=8897482848704f2a8f8d7c79726a70d4",
+      "track_number" : 1,
+      "type" : "track",
+      "uri" : "spotify:track:5ANbXf5qR48a4jfFnSq80w"
+    }
+  }, {
+    "added_at" : "2017-02-09T16:23:34Z",
+    "added_by" : {
+      "external_urls" : {
+        "spotify" : "http://open.spotify.com/user/testuserspotifyapp"
+      },
+      "href" : "https://api.spotify.com/v1/users/testuserspotifyapp",
+      "id" : "testuserspotifyapp",
+      "type" : "user",
+      "uri" : "spotify:user:testuserspotifyapp"
+    },
+    "is_local" : false,
+    "track" : {
+      "album" : {
+        "album_type" : "album",
+        "artists" : [ {
+          "external_urls" : {
+            "spotify" : "https://open.spotify.com/artist/1z4g3DjTBBZKhvAroFlhOM"
+          },
+          "href" : "https://api.spotify.com/v1/artists/1z4g3DjTBBZKhvAroFlhOM",
+          "id" : "1z4g3DjTBBZKhvAroFlhOM",
+          "name" : "Red Velvet",
+          "type" : "artist",
+          "uri" : "spotify:artist:1z4g3DjTBBZKhvAroFlhOM"
+        } ],
+        "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TR", "TW", "US", "UY" ],
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/album/01n9lwCLSigXsuY0AdFS9O"
+        },
+        "href" : "https://api.spotify.com/v1/albums/01n9lwCLSigXsuY0AdFS9O",
+        "id" : "01n9lwCLSigXsuY0AdFS9O",
+        "images" : [ {
+          "height" : 640,
+          "url" : "https://i.scdn.co/image/ffb98f9ee64485ae4932799d60ecaac7f7a16a3f",
+          "width" : 640
+        }, {
+          "height" : 300,
+          "url" : "https://i.scdn.co/image/f39c6b535139f6dcb352e5df2b13047453f2e58d",
+          "width" : 300
+        }, {
+          "height" : 64,
+          "url" : "https://i.scdn.co/image/60c61b6ae556a1fe91cfd1f459e32b2a50f269db",
+          "width" : 64
+        } ],
+        "name" : "Rookie - The 4th Mini Album",
+        "type" : "album",
+        "uri" : "spotify:album:01n9lwCLSigXsuY0AdFS9O"
+      },
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/1z4g3DjTBBZKhvAroFlhOM"
+        },
+        "href" : "https://api.spotify.com/v1/artists/1z4g3DjTBBZKhvAroFlhOM",
+        "id" : "1z4g3DjTBBZKhvAroFlhOM",
+        "name" : "Red Velvet",
+        "type" : "artist",
+        "uri" : "spotify:artist:1z4g3DjTBBZKhvAroFlhOM"
+      } ],
+      "available_markets" : [ "AD", "AR", "AT", "AU", "BE", "BG", "BO", "BR", "CA", "CH", "CL", "CO", "CR", "CY", "CZ", "DE", "DK", "DO", "EC", "EE", "ES", "FI", "FR", "GB", "GR", "GT", "HK", "HN", "HU", "ID", "IE", "IS", "IT", "LI", "LT", "LU", "LV", "MC", "MT", "MX", "MY", "NI", "NL", "NO", "NZ", "PA", "PE", "PH", "PL", "PT", "PY", "SE", "SG", "SK", "SV", "TR", "TW", "US", "UY" ],
+      "disc_number" : 1,
+      "duration_ms" : 201644,
+      "explicit" : false,
+      "external_ids" : {
+        "isrc" : "KR-A30-17-00052"
+      },
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/track/7fMlxVFAUsUilPFQnlX6kR"
+      },
+      "href" : "https://api.spotify.com/v1/tracks/7fMlxVFAUsUilPFQnlX6kR",
+      "id" : "7fMlxVFAUsUilPFQnlX6kR",
+      "name" : "Happily Ever After",
+      "popularity" : 51,
+      "preview_url" : "https://p.scdn.co/mp3-preview/07757b9bc89be1235ed71c2f0cf918d68f6a071e?cid=8897482848704f2a8f8d7c79726a70d4",
+      "track_number" : 3,
+      "type" : "track",
+      "uri" : "spotify:track:7fMlxVFAUsUilPFQnlX6kR"
+    }
+  } ],
+  "limit" : 100,
+  "next" : null,
+  "offset" : 0,
+  "previous" : null,
+  "total" : 2
+}
