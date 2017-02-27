@@ -7,6 +7,7 @@ angular.module('SearchCtrl', [])
   $scope.trackResults = []
   $scope.artistResults = []
   $scope.playlists = []
+  $scope.searchPerformed = false
   let trackUri = ""
 
   // Perform auth check on view enter
@@ -58,6 +59,7 @@ angular.module('SearchCtrl', [])
    */
   $scope.onSubmit = function(query) {
     const SEARCH_BY = 'artist,track'
+    $scope.searchPerformed = true
 
   	Spotify
   		 .search(query, SEARCH_BY, {limit: 5})

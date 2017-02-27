@@ -7,6 +7,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
   $scope.trackResults = [];
   $scope.artistResults = [];
   $scope.playlists = [];
+  $scope.searchPerformed = false;
   var trackUri = "";
 
   // Perform auth check on view enter
@@ -64,6 +65,7 @@ angular.module('SearchCtrl', []).controller('SearchCtrl', function ($scope, $ion
    */
   $scope.onSubmit = function (query) {
     var SEARCH_BY = 'artist,track';
+    $scope.searchPerformed = true;
 
     Spotify.search(query, SEARCH_BY, { limit: 5 }).then(function (data) {
       $scope.trackResults = data.tracks.items;

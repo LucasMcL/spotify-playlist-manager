@@ -15,7 +15,7 @@
 
     <!-- Track Results -->
     <ion-list>
-      <ion-item class="item-divider">
+      <ion-item class="item-divider" ng-show="searchPerformed">
         Tracks - top results
       </ion-item>
       <ion-item ng-repeat="item in trackResults" class="item-button-right">
@@ -29,7 +29,7 @@
 
     <!-- Artist Results -->
     <ion-list>
-      <ion-item class="item-divider">
+      <ion-item class="item-divider" ng-show="searchPerformed">
         Artists - top results
       </ion-item>
       <a ng-repeat="item in artistResults"
