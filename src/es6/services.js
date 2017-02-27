@@ -113,17 +113,25 @@ angular.module('services', [])
           resolve()
           return
         }
+
         range_start = remaining.indexOf(newUris[i])
         insert_before = i
-        console.log(`${i}: moving track from ${range_start} to before ${insert_before}`)
 
-        Spotify
-          .reorderPlaylistTracks(userid, listid, {range_start, insert_before})
-          .then(() => {
-            i++
-            updateRemaining()
-            reorderTracks()
-          })
+        if(range_start === insert_before) { // don't make AJAX request if already in right place
+          console.log(`match at ${i}`)
+          i++
+          updateRemaining()
+          reorderTracks()
+        } else {
+          console.log(`${i}: moving track from ${range_start} to before ${insert_before}`)
+          Spotify
+            .reorderPlaylistTracks(userid, listid, {range_start, insert_before})
+            .then(() => {
+              i++
+              updateRemaining()
+              reorderTracks()
+            })
+        }
       }
     })
 
