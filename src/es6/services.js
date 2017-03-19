@@ -11,7 +11,9 @@ angular.module('services', [])
    * @return {string} - user id of current user
    */
   function getCurrentUser() {
-    return Spotify.getCurrentUser().then(user => { return user.id })
+    return Spotify.getCurrentUser()
+      .then(user => { return user.id })
+      .catch(err => { return err })
   }
 
   /**
@@ -20,11 +22,10 @@ angular.module('services', [])
    */
   function performLogin() {
     console.log('logging in')
-    return $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function(result) {
-      window.localStorage.setItem('spotify-token', result.access_token)
+    return $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(result => {
       Spotify.setAuthToken(result.access_token)
     }, function(error) {
-      console.dir(error)
+      console.error(error)
     })
   }
 
@@ -37,14 +38,11 @@ angular.module('services', [])
    * @return {Promise} - Returns promise either after token is found, or after login succeeded
    */
   function verify() {
-    let storedToken = window.localStorage.getItem('spotify-token')
     console.log('checking for Auth')
-    if(storedToken) {
-      Spotify.setAuthToken(storedToken)
-      return Promise.resolve()
-    } else {
-      return performLogin()
-    }
+
+    return Spotify.getCurrentUser()
+      .then(() => { return Promise.resolve() })
+      .catch(err => { return performLogin() })
   }
 
   return {

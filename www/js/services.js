@@ -12,6 +12,8 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
   function getCurrentUser() {
     return Spotify.getCurrentUser().then(function (user) {
       return user.id;
+    }).catch(function (err) {
+      return err;
     });
   }
 
@@ -22,10 +24,9 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
   function performLogin() {
     console.log('logging in');
     return $cordovaOauth.spotify(CLIENT_ID, SCOPE).then(function (result) {
-      window.localStorage.setItem('spotify-token', result.access_token);
       Spotify.setAuthToken(result.access_token);
     }, function (error) {
-      console.dir(error);
+      console.error(error);
     });
   }
 
@@ -38,14 +39,13 @@ angular.module('services', []).factory('Auth', function ($cordovaOauth, Spotify)
    * @return {Promise} - Returns promise either after token is found, or after login succeeded
    */
   function verify() {
-    var storedToken = window.localStorage.getItem('spotify-token');
     console.log('checking for Auth');
-    if (storedToken) {
-      Spotify.setAuthToken(storedToken);
+
+    return Spotify.getCurrentUser().then(function () {
       return Promise.resolve();
-    } else {
+    }).catch(function (err) {
       return performLogin();
-    }
+    });
   }
 
   return {
