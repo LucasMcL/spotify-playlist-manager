@@ -10,6 +10,7 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
   $scope.playlistTitle = $stateParams.listTitle;
 
   $scope.editMode = false; // toggled on and off
+  $scope.reordering = false; // toggled on and off
   $scope.changesMade = false; // turned to true when first edit made
   $scope.orderCriteria = "none";
   $scope.descending = false;
@@ -85,6 +86,22 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
     } else {
       enterEditMode();
     }
+  };
+
+  /**
+   * toggles reordering variable that disables scrolling in ion-content
+   */
+  $scope.onReorderButtonTouch = function () {
+    console.log('reorder button touched');
+    $scope.reordering = true;
+  };
+
+  /**
+   * toggles reordering variable that disables scrolling in ion-content
+   */
+  $scope.onReorderButtonRelease = function () {
+    console.log('reorder button released');
+    $scope.reordering = false;
   };
 
   /**

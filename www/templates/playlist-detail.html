@@ -7,7 +7,7 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
   <ion-nav-buttons side="secondary">
     <button class="button button-icon icon ion-edit" ng-click="onEditButtonTap()"></button>
   </ion-nav-buttons>
-  <ion-content class="padding">
+  <ion-content class="padding" ng-class="{noscroll: reordering}">
 
     <!-- Order songs by: -->
     <ion-item class="item-input item-select" ng-show="editMode">
@@ -34,7 +34,7 @@ tracks is list of songs in playlist, retreived from spotify (controller.js)
         </ion-delete-button>
         <h3>{{item.track.name}}</h3>
         <p>{{item.track.artists[0].name}} • {{item.track.album.name}}</p>
-        <ion-reorder-button class="ion-navicon" on-reorder="onItemMove(item, $fromIndex, $toIndex)"></ion-reorder-button>
+        <ion-reorder-button class="ion-navicon" on-reorder="onItemMove(item, $fromIndex, $toIndex)" on-touch="onReorderButtonTouch()" on-release="onReorderButtonRelease()"></ion-reorder-button>
       </ion-item>
 
     </ion-list>
