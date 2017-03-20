@@ -196,6 +196,9 @@ angular.module('PlaylistDetailCtrl', [])
               $scope.$apply()
             })
         }).catch(error => {
+          $ionicLoading.hide() // hide loading spinner
+          alert('There was an error saving changes.')
+          cancelChanges()
           console.dir(error)
         })
     }

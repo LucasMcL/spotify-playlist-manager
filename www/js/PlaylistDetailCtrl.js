@@ -192,6 +192,9 @@ angular.module('PlaylistDetailCtrl', []).controller('PlaylistDetailCtrl', functi
           $scope.$apply();
         });
       }).catch(function (error) {
+        $ionicLoading.hide(); // hide loading spinner
+        alert('There was an error saving changes.');
+        cancelChanges();
         console.dir(error);
       });
     }
