@@ -1,4 +1,4 @@
-# Spotify Playlist Manager
+# Playlist Editor for Spotify
 Organize your Spotify playlists on your android device
 
 ## Overview
