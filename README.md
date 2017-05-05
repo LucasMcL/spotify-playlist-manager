@@ -10,7 +10,13 @@ Source code for the app is located in the src folder.  I used babel to transpile
 ## Google Play
 View it on the Google Play store [here](https://play.google.com/store/apps/details?id=com.ionicframework.spotifyplaylistmanager151406)!
 
-## Screenshots
-<img src="http://i.imgur.com/5zIH8jA.png" alt="View playlists" width="300"/>
-<img src="http://i.imgur.com/Yd8LUSy.png" alt="Edit playlist" width="300"/>
-<img src="http://i.imgur.com/z1QgsdA.png" alt="Add songs" width="300"/>
+## See it in action!
+### Edit your playlist and see the changes in Spotify
+![](https://media.giphy.com/media/xUPGcyTy1DlRRbkvm0/giphy.gif)
+<br>
+### Order by different criteria and discard changes
+![](https://media.giphy.com/media/3ohzdPdMQOU1ZtaHxS/giphy.gif)
+<br>
+### Add songs to your playlist straight from the app
+![](https://media.giphy.com/media/3ohzdU0ddSNPnFz5Bu/giphy.gif)
+<br>
