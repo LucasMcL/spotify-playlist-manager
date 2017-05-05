@@ -6,3 +6,11 @@ It is currently not possible to manually reorder playlist songs on the android S
 
 ## Source code
 Source code for the app is located in the src folder.  I used babel to transpile that ES6 Javascript to ES5.  The ES5 code is located in www/js.
+
+## Google Play
+View it on the Google Play store [here](https://play.google.com/store/apps/details?id=com.ionicframework.spotifyplaylistmanager151406)!
+
+## Screenshots
+<img src="http://i.imgur.com/5zIH8jA.png" alt="View playlists" width="300"/>
+<img src="http://i.imgur.com/Yd8LUSy.png" alt="Edit playlist" width="300"/>
+<img src="http://i.imgur.com/z1QgsdA.png" alt="Add songs" width="300"/>
